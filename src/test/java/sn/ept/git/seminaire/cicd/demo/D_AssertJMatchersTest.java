@@ -114,15 +114,15 @@ class D_AssertJMatchersTest {
          }
 
         Dog dog = new Dog("Fido", 5.25);
-        Dog dogwClone = new Dog("Fido", 5.25);
+        Dog dogClone = new Dog("Fido", 5.25);
 
         assertThat(dog)
-                .isNotEqualTo(dogwClone);
+                .isNotEqualTo(dogClone);
 
         assertThat(dog)
                 .usingRecursiveComparison()
                 .ignoringFields("random")
-                .isEqualTo(dogwClone);
+                .isEqualTo(dogClone);
     }
 
 

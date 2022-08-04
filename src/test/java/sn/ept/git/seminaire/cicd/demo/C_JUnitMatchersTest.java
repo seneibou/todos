@@ -151,12 +151,12 @@ class C_JUnitMatchersTest {
     void shouldReturnCorrectMessageBeforeTimeoutIsExceeded() {
         final String VALUE = "Hello World!";
         final String message = assertTimeout(
-                Duration.ofMillis(50),
+                Duration.ofMillis(500),
                 () -> {
-                    Thread.sleep(20);
+                    Thread.sleep(5);
                     return VALUE;
                 }
-                );
+      );
         assertEquals(VALUE, message);
     }
 

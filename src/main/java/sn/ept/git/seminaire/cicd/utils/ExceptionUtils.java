@@ -2,7 +2,9 @@ package sn.ept.git.seminaire.cicd.utils;
 
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
+import sn.ept.git.seminaire.cicd.models.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +18,7 @@ public final class ExceptionUtils {
         super();
     }
 
-    public static final void presentOrThrow(Optional optional, String template, String ... params){
+    public static  void presentOrThrow(Optional<?> optional, String template, String ... params){
         if(!optional.isPresent()){
             throw new ItemNotFoundException(
                     ItemNotFoundException.format(template, params)
@@ -24,21 +26,19 @@ public final class ExceptionUtils {
         }
     }
 
-
-    public static final void emptyOrThrow(Set<UUID> ids, String template){
-        if(!ids.isEmpty()){
-            throw new ItemNotFoundException(
-                    ItemNotFoundException.format(template, ids.stream().map(UUID::toString).reduce("",(a,b)->a.concat(",").concat(b)))
-            );
-        }
-    }
-
-    public static final void absentOrThrow(Optional optional, String template, String ... params){
+    public static  void absentOrThrow(Optional<?> optional, String template, String ... params){
         if(optional.isPresent()){
             throw new ItemExistsException(
                     ItemExistsException.format(template, params)
             );
         }
+    }
+
+
+    public static  void ThrowNotFound(String template, String ... params){
+            throw new ItemNotFoundException(
+                    ItemNotFoundException.format(template, params)
+            );
     }
 
 }

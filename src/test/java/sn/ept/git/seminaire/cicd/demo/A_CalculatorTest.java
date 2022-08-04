@@ -87,7 +87,9 @@ class A_CalculatorTest {
 
     @RepeatedTest(value = 3)
     void testAddRepeated() {
-        assertThat(1).isEqualTo(1);
+        expected =a*2;
+        result = calculator.add(a,a);
+        assertThat(result).isEqualTo(expected);
     }
 
 

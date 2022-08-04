@@ -46,10 +46,15 @@ public class TagServiceImpl implements ITagService {
     @Override
     public void delete(UUID uuid) {
         final Optional<Tag> optional = repository.findById(uuid);
-        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.SITE_BY_ID, uuid.toString());
-        final Tag site = optional.get();
-        site.setDeleted(true);
-        repository.saveAndFlush(site);
+        if(optional.isPresent()){
+            final Tag site = optional.get();
+            site.setDeleted(true);
+            repository.saveAndFlush(site);
+            return;
+        }
+        throw new ItemNotFoundException(
+                ItemNotFoundException.format(ItemNotFoundException.TAG_BY_ID, uuid.toString())
+        );
     }
 
     @Override
@@ -79,10 +84,17 @@ public class TagServiceImpl implements ITagService {
     @Override
     public TagDTO update(UUID uuid, TagVM vm) {
         final Optional<Tag> optional = repository.findById(uuid);
-        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.SITE_BY_ID, vm.getId().toString());
-        final Tag item = optional.get();
-        item.setName(vm.getName());
-        return mapper.asDTO(repository.saveAndFlush(item));
+        if(optional.isPresent()){
+            final Tag item = optional.get();
+            item.setName(vm.getName());
+            item.setDescription(vm.getDescription());
+            return mapper.asDTO(repository.saveAndFlush(item));
+        }
+
+
+        throw new ItemNotFoundException(
+                ItemNotFoundException.format(ItemNotFoundException.TAG_BY_ID, uuid.toString())
+        );
     }
 
     @Transactional

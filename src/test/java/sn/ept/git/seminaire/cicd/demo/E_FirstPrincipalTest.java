@@ -1,21 +1,29 @@
 package sn.ept.git.seminaire.cicd.demo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import sn.ept.git.seminaire.cicd.demo.exception.BadPhoneException;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 @Slf4j
 class E_FirstPrincipalTest {
+
+    public static final String ORANGE = "ORANGE";
+    public static final String FREE = "FREE";
+    public static final String EXPRESSO = "EXPRESSO";
+    public static final String PROMOBILE = "PROMOBILE";
 
     private static ICalculator calculator;
     private static double resultOne, resultTwo;
@@ -34,6 +42,7 @@ class E_FirstPrincipalTest {
         a = 11;
         b = 22;
     }
+
 
     /**
      * A developer should not hesitate to run the tests as they are slow.
@@ -63,7 +72,7 @@ class E_FirstPrincipalTest {
         @Order(0)
         @Test
         void addShouldReturnTheSumOfTwoPositiveNumbers() {
-          //  org.assertj.core.api.Assertions.fail("");
+            //  org.assertj.core.api.Assertions.fail("");
             resultOne = calculator.add(b, resultOne);
             assertThat(resultOne).isEqualTo(55);
         }
@@ -104,7 +113,6 @@ class E_FirstPrincipalTest {
         }
     }
 
-
     /**
      * what it means is that running your test leaves it perfectly clear whether it passed or failed.
      * JUnit does this and fails with red, which lets you red-green-refactor.
@@ -132,6 +140,38 @@ class E_FirstPrincipalTest {
     }
 
 
+    static Stream<Arguments> valideMobilePhone() {
+        return Stream.of(
+                of("+221", "77", ORANGE),
+                of("+221", "78", ORANGE),
+                of("00221", "77", ORANGE),
+                of("00221", "78", ORANGE),
+                of("", "77", ORANGE),
+                of("", "78", ORANGE),
+                of("+221", "76", FREE),
+                of("00221", "76", FREE),
+                of("", "76", FREE),
+                of("+221", "70", EXPRESSO),
+                of("00221", "70", EXPRESSO),
+                of("", "70", EXPRESSO),
+                of("+221", "75", PROMOBILE),
+                of("00221", "75", PROMOBILE),
+                of("", "75", PROMOBILE)
+        );
+    }
+
+    static Stream<Arguments> invalideMobilePhone() {
+        String number = "9876543";
+        return Stream.of(
+                of("+222", "70", number),
+                of("+221", "71", number),
+                of("+221", "70", number.substring(0, 5)),
+                of("+221", "70", number.concat("2")),
+                of("+221", "70", number.replace("9", "n"))
+        );
+    }
+
+
     /**
      * ==> Timely
      * Practically, You can write unit tests at any time.
@@ -147,23 +187,40 @@ class E_FirstPrincipalTest {
      */
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-    class ThoroughAndTimely {
+     class ThoroughAndTimely {
 
-        public static final String ORANGE = "ORANGE";
-        public static final String FREE = "FREE";
-        public static final String EXPRESSO = "EXPRESSO";
-        public static final String PROMOBILE = "PROMOBILE";
+
         String indicatif, operator;
         String number = "9876543";
         String template = "%s%s%s";
-        String phone ;
+        String phone;
 
 
-        @Test
+
+        @ParameterizedTest
+        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#valideMobilePhone")
+        void getMobileOperator_shouldReturnCorrectOperator(String indicatif, String operator, String expected) {
+            phone = String.format(template, indicatif, operator, number);
+            String result = Validator.getMobileOperator(phone);
+            assertThat(result).isEqualTo(expected);
+        }
+
+        @ParameterizedTest
+        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#invalideMobilePhone")
+        void getMobileOperator_shouldThrowException(String indicatif, String operator, String number) {
+            phone = String.format(template, indicatif, operator, number);
+            assertThrows(
+                    BadPhoneException.class,
+                    () -> Validator.getMobileOperator(phone)
+            );
+        }
+
+
+        /*@Test
         void getMobileOperator_withPlusIndicatifAnd77_shouldReturnOrange() {
             indicatif = "+221";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -172,7 +229,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withPlusIndicatifAnd78_shouldReturnOrange() {
             indicatif = "+221";
             operator = "78";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -181,7 +238,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_with00IndicatifAnd77_shouldReturnOrange() {
             indicatif = "00221";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -190,7 +247,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_with00IndicatifAnd78_shouldReturnOrange() {
             indicatif = "00221";
             operator = "78";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -199,7 +256,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withoutIndicatifAnd77_shouldReturnOrange() {
             indicatif = "";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -208,7 +265,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withoutIndicatifAnd78_shouldReturnOrange() {
             indicatif = "";
             operator = "78";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(ORANGE);
         }
@@ -217,7 +274,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withPlusIndicatifAnd76_shouldReturnFree() {
             indicatif = "+221";
             operator = "76";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(FREE);
         }
@@ -226,7 +283,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_with00IndicatifAnd76_shouldReturnFree() {
             indicatif = "00221";
             operator = "76";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(FREE);
         }
@@ -235,7 +292,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withoutIndicatifAnd76_shouldReturnFree() {
             indicatif = "";
             operator = "76";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(FREE);
         }
@@ -244,7 +301,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withPlusIndicatifAnd70_shouldReturnExpresso() {
             indicatif = "+221";
             operator = "70";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(EXPRESSO);
         }
@@ -253,7 +310,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_with00IndicatifAnd70_shouldReturnExpresso() {
             indicatif = "00221";
             operator = "70";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(EXPRESSO);
         }
@@ -262,7 +319,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withoutIndicatifAnd70_shouldReturnExpresso() {
             indicatif = "";
             operator = "70";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(EXPRESSO);
         }
@@ -271,7 +328,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withPlusIndicatifAnd75_shouldReturnPromobile() {
             indicatif = "+221";
             operator = "75";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(PROMOBILE);
         }
@@ -280,7 +337,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_with00IndicatifAnd75_shouldReturnPromobile() {
             indicatif = "00221";
             operator = "75";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(PROMOBILE);
         }
@@ -289,7 +346,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withoutIndicatifAnd75_shouldReturnPromobile() {
             indicatif = "";
             operator = "75";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             String result = Validator.getMobileOperator(phone);
             assertThat(result).isEqualTo(PROMOBILE);
         }
@@ -298,7 +355,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withBadIndicatif_shouldThrowError() {
             indicatif = "+222";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -309,7 +366,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withBadOperator_shouldThrowError() {
             indicatif = "+221";
             operator = "79";
-            phone =String.format(template, indicatif, operator, number);
+            phone = String.format(template, indicatif, operator, number);
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -320,7 +377,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withNumberLessThan7digits_shouldThrowError() {
             indicatif = "+221";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number.substring(0, 5));
+            phone = String.format(template, indicatif, operator, number.substring(0, 5));
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -331,7 +388,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withNumberMorThan7digits_shouldThrowError() {
             indicatif = "+221";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number.concat("2"));
+            phone = String.format(template, indicatif, operator, number.concat("2"));
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -342,12 +399,12 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withBadNumber_shouldThrowError() {
             indicatif = "+221";
             operator = "77";
-            phone =String.format(template, indicatif, operator, number.replace("9", "n"));
+            phone = String.format(template, indicatif, operator, number.replace("9", "n"));
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
             );
-        }
+        }*/
 
     }
 }

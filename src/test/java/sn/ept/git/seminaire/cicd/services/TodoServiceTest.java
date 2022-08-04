@@ -101,9 +101,10 @@ class TodoServiceTest extends ServiceBaseTest {
 
     @Test
     void delete_withBadId_ShouldThrowException() {
+        UUID id = UUID.randomUUID();
         assertThrows(
                 ItemNotFoundException.class,
-                () ->service.delete(UUID.randomUUID())
+                () ->service.delete(id)
         );
     }
 

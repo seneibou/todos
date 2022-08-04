@@ -47,10 +47,15 @@ public class TodoServiceImpl implements ITodoService {
     @Override
     public void delete(UUID uuid) {
         final Optional<Todo> optional = repository.findById(uuid);
-        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.SOCIETE_BY_ID, uuid.toString());
-        final Todo todo = optional.get();
-        todo.setDeleted(true);
-        repository.saveAndFlush(todo);
+        if(optional.isPresent()){
+            final Todo todo = optional.get();
+            todo.setDeleted(true);
+            repository.saveAndFlush(todo);
+            return;
+        }
+        throw new ItemNotFoundException(
+                ItemNotFoundException.format(ItemNotFoundException.TODO_BY_ID, uuid.toString())
+        );
     }
 
     @Override
@@ -81,16 +86,17 @@ public class TodoServiceImpl implements ITodoService {
     public TodoDTO update(UUID uuid, TodoVM vm) {
          Optional<Todo>  optional = repository.findByTitleWithNotEquals(vm.getTitle(),uuid);
         ExceptionUtils.absentOrThrow(optional, ItemExistsException.TITLE_EXISTS, vm.getTitle());
-
         optional = repository.findById(uuid);
-        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.SOCIETE_BY_ID, vm.getId().toString());
-
-        final Todo item = optional.get();
-        item.setTitle(vm.getTitle());
-        item.setDescription(vm.getDescription());
-        item.setCompleted(vm.isCompleted());
-
-        return mapper.asDTO(repository.saveAndFlush(item));
+        if(optional.isPresent()){
+            final Todo item = optional.get();
+            item.setTitle(vm.getTitle());
+            item.setDescription(vm.getDescription());
+            item.setCompleted(vm.isCompleted());
+            return mapper.asDTO(repository.saveAndFlush(item));
+        }
+        throw new ItemNotFoundException(
+                ItemNotFoundException.format(ItemNotFoundException.TODO_BY_ID, uuid.toString())
+        );
     }
 
     @Transactional

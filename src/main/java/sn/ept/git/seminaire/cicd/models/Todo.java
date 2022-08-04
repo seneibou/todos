@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ import java.util.Set;
 @Table(name = "acicd_todos")
 @Where(clause = BaseEntity.CLAUSE)
 @DynamicUpdate
-public class Todo extends BaseEntity {
+public class Todo extends BaseEntity implements Serializable {
 
     @NotBlank
     @Size(min = SizeMapping.Title.MIN, max = SizeMapping.Title.MAX)

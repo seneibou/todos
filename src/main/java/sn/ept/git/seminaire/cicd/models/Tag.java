@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Entity
 @Table(name="acicd_tags")
 @Where(clause = BaseEntity.CLAUSE)
-public class Tag extends BaseEntity{
+public class Tag extends BaseEntity implements Serializable {
 
     @NotBlank
     @Size(min = SizeMapping.Name.MIN,max = SizeMapping.Name.MAX)

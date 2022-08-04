@@ -63,7 +63,6 @@ public class TagResource {
             @PathVariable("id") UUID id,
             @RequestBody @Valid TagVM vm) {
         final TagDTO dto = service.update(id, vm);
-        Optional<TagDTO> optional = Optional.ofNullable(dto);
-        return ResponseUtil.wrapOrNotFound(optional,HttpStatus.ACCEPTED);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(dto),HttpStatus.ACCEPTED);
     }
 }
