@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
-class G_ArchTest {
+class H_ArchTest {
 
     public static final String BASE = "sn.ept.git.seminaire.cicd";
     public static final String SERVICES = BASE.concat(".services..");

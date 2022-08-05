@@ -18,6 +18,6 @@ public interface TodoRepository extends JpaRepository<Todo, UUID> {
 
 
     @Query("select s from Todo  s where s.title=:title and s.id<>:id")
-    Optional<Todo> findByTitleWithNotEquals(@Param("title") String title,@Param("id")  UUID id);
+    Optional<Todo> findByTitleWithIdNotEquals(@Param("title") String title, @Param("id")  UUID id);
 
 }

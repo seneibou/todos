@@ -33,7 +33,7 @@ class E_FirstPrincipalTest {
     static void beforeAll() {
         log.info("Something to do before all tests");
         calculator = new Calculator();
-        resultOne = 33;
+        resultOne = 0;
     }
 
     @BeforeEach
@@ -47,12 +47,13 @@ class E_FirstPrincipalTest {
     /**
      * A developer should not hesitate to run the tests as they are slow.
      * You should be aiming for many hundreds or thousands of tests per second.
-     * => SRP principal
+     *
+     * => Avoid depending on network or external services
      */
     @Nested
     class Fast {
 
-        @RepeatedTest(100)
+        @RepeatedTest(1000)
         void addShouldReturnTheSumOfPositiveNumbers() {
             double provided = calculator.add(b, a);
             double expected = a + b;
@@ -63,6 +64,8 @@ class E_FirstPrincipalTest {
     /**
      * You can isolate them from interfering with one another
      * No order-of-run dependency => They should pass or fail the same way in suite or when run individually.
+     *
+     * => not test should prepare data for others
      */
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -72,24 +75,28 @@ class E_FirstPrincipalTest {
         @Order(0)
         @Test
         void addShouldReturnTheSumOfTwoPositiveNumbers() {
-            //  org.assertj.core.api.Assertions.fail("");
-            resultOne = calculator.add(b, resultOne);
-            assertThat(resultOne).isEqualTo(55);
+            // un comment the following line ot change order of running
+             org.assertj.core.api.Assertions.fail("volontairement");
+            resultOne = calculator.add(a, b); //resultOne =33
+            assertThat(resultOne).isEqualTo(33);
         }
 
         @Order(1)
         @Test
         void givenTwoPositiveIntegers_whenMultiply_thenCorrectResult() {
+            //resultOne = 33
             resultOne = calculator.multiply(a, resultOne);
-            assertThat(resultOne).isEqualTo(605);
+            //resultOne = 11*33 = 363
+            assertThat(resultOne).isEqualTo(363);
         }
     }
 
     /**
      * No matter how often or where you run it, it should produce the same result (Deterministic results ).
-     * Each test should setup or arrange it's own data.
-     * What if a set of tests need some common data? Use Data Helper classes that can setup this data for re-usability.
-     * Good occasion to use un-memory DB
+     * Each test should set up or arrange its own data.
+     *
+     * ===>  What if a set of tests need some common data? Use Data Helper classes that can setup this data for re-usability.
+     *
      */
     @Nested
     class Repeatable {
@@ -104,7 +111,10 @@ class E_FirstPrincipalTest {
 
         @Test
         void addShouldReturnLinesOfAGivenFile() {
-            List<String> result = fileReader.read("data.txt");
+            String path ="my_file.txt";
+
+            List<String> result = fileReader.read(path);
+
             assertThat(result)
                     .isNotNull()
                     .isNotEmpty()
@@ -117,26 +127,30 @@ class E_FirstPrincipalTest {
      * what it means is that running your test leaves it perfectly clear whether it passed or failed.
      * JUnit does this and fails with red, which lets you red-green-refactor.
      * By using a testing framework like JUnit, utilizing assertion libraries, and writing specific tests,
-     * you can ensure that if a test fails, there will be clear and unambiguous reporting that tells you exactly what passed or failed.
+     * you can ensure that if a test fails, there will be clear and unambiguous reporting that tells
+     * you exactly what passed or failed.
      */
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class SelfValidating {
 
-        @Order(0)
         @Test
         void addShouldReturnTheSumOfTwoPositiveNumbers() {
+            double expected =a+b;
             resultTwo = calculator.add(b, a);
-            assertThat(resultTwo).isEqualTo(a + b);
+            assertThat(resultTwo).isEqualTo(expected);
         }
 
-        @Order(1)
+
         @Test
-        void givenCalculator_whenMultiplyTwoPositiveNumbers_thenCorrectResult() {
-
-            resultTwo = calculator.multiply(b, a);
-            assertThat(resultTwo).isEqualTo(a * b);
+        void addShouldReturnTheSumOfTwoNegativeNumbers() {
+            double expected = -(a+b);
+            resultTwo = calculator.add(-b, -a);
+            //deliberately failed
+            assertThat(resultTwo).isEqualTo(expected);
         }
+
+
     }
 
 
@@ -148,12 +162,15 @@ class E_FirstPrincipalTest {
                 of("00221", "78", ORANGE),
                 of("", "77", ORANGE),
                 of("", "78", ORANGE),
+
                 of("+221", "76", FREE),
                 of("00221", "76", FREE),
                 of("", "76", FREE),
+
                 of("+221", "70", EXPRESSO),
                 of("00221", "70", EXPRESSO),
                 of("", "70", EXPRESSO),
+
                 of("+221", "75", PROMOBILE),
                 of("00221", "75", PROMOBILE),
                 of("", "75", PROMOBILE)
@@ -167,6 +184,7 @@ class E_FirstPrincipalTest {
                 of("+221", "71", number),
                 of("+221", "70", number.substring(0, 5)),
                 of("+221", "70", number.concat("2")),
+                //+22170n876543
                 of("+221", "70", number.replace("9", "n"))
         );
     }
@@ -197,26 +215,7 @@ class E_FirstPrincipalTest {
 
 
 
-        @ParameterizedTest
-        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#valideMobilePhone")
-        void getMobileOperator_shouldReturnCorrectOperator(String indicatif, String operator, String expected) {
-            phone = String.format(template, indicatif, operator, number);
-            String result = Validator.getMobileOperator(phone);
-            assertThat(result).isEqualTo(expected);
-        }
-
-        @ParameterizedTest
-        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#invalideMobilePhone")
-        void getMobileOperator_shouldThrowException(String indicatif, String operator, String number) {
-            phone = String.format(template, indicatif, operator, number);
-            assertThrows(
-                    BadPhoneException.class,
-                    () -> Validator.getMobileOperator(phone)
-            );
-        }
-
-
-        /*@Test
+       /* @Test
         void getMobileOperator_withPlusIndicatifAnd77_shouldReturnOrange() {
             indicatif = "+221";
             operator = "77";
@@ -351,10 +350,12 @@ class E_FirstPrincipalTest {
             assertThat(result).isEqualTo(PROMOBILE);
         }
 
+
         @Test
         void getMobileOperator_withBadIndicatif_shouldThrowError() {
             indicatif = "+222";
             operator = "77";
+            //+222779876543
             phone = String.format(template, indicatif, operator, number);
             assertThrows(
                     BadPhoneException.class,
@@ -366,6 +367,7 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withBadOperator_shouldThrowError() {
             indicatif = "+221";
             operator = "79";
+            //+221799876543
             phone = String.format(template, indicatif, operator, number);
             assertThrows(
                     BadPhoneException.class,
@@ -377,7 +379,9 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withNumberLessThan7digits_shouldThrowError() {
             indicatif = "+221";
             operator = "77";
-            phone = String.format(template, indicatif, operator, number.substring(0, 5));
+            String currentNumber =number.substring(0, 5);
+            //+2217798765
+            phone = String.format(template, indicatif, operator, currentNumber);
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -388,7 +392,10 @@ class E_FirstPrincipalTest {
         void getMobileOperator_withNumberMorThan7digits_shouldThrowError() {
             indicatif = "+221";
             operator = "77";
-            phone = String.format(template, indicatif, operator, number.concat("2"));
+
+            String currentNumber =number.concat("2");
+            //+2217798765432
+            phone = String.format(template, indicatif, operator,currentNumber );
             assertThrows(
                     BadPhoneException.class,
                     () -> Validator.getMobileOperator(phone)
@@ -405,6 +412,41 @@ class E_FirstPrincipalTest {
                     () -> Validator.getMobileOperator(phone)
             );
         }*/
+
+
+
+
+
+
+        @ParameterizedTest
+        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#valideMobilePhone")
+        void getMobileOperator_shouldReturnCorrectOperator(
+                String indicatif, String operator, String expected
+        ) {
+            //
+            phone = String.format(template, indicatif, operator, number);
+
+            //
+            String result = Validator.getMobileOperator(phone);
+
+            //
+            assertThat(result).isEqualTo(expected);
+        }
+
+
+        @ParameterizedTest
+        @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#invalideMobilePhone")
+        void getMobileOperator_shouldThrowException(
+                String indicatif, String operator, String number
+        ) {
+            phone = String.format(template, indicatif, operator, number);
+
+            assertThrows(
+                    BadPhoneException.class,
+                    () -> Validator.getMobileOperator(phone)
+            );
+        }
+
 
     }
 }

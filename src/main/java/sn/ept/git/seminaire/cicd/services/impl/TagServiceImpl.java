@@ -7,6 +7,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.mappers.TagMapper;
 import sn.ept.git.seminaire.cicd.mappers.vm.TagVMMapper;
 import sn.ept.git.seminaire.cicd.models.Tag;
+import sn.ept.git.seminaire.cicd.models.Todo;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
@@ -83,7 +84,10 @@ public class TagServiceImpl implements ITagService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public TagDTO update(UUID uuid, TagVM vm) {
-        final Optional<Tag> optional = repository.findById(uuid);
+
+        Optional<Tag>  optional = repository.findByNameWithIdNotEquals(vm.getName(),uuid);
+        ExceptionUtils.absentOrThrow(optional, ItemExistsException.TITLE_EXISTS, vm.getName());
+        optional = repository.findById(uuid);
         if(optional.isPresent()){
             final Tag item = optional.get();
             item.setName(vm.getName());

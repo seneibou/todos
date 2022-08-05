@@ -69,7 +69,7 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByNameWithIdNotEqual_shouldReturnResult() {
-        optionalSociete = repository.findByTitleWithNotEquals(entity.getTitle(),UUID.randomUUID());
+        optionalSociete = repository.findByTitleWithIdNotEquals(entity.getTitle(),UUID.randomUUID());
         assertThat(optionalSociete)
                 .isNotNull()
                 .isPresent()
@@ -80,7 +80,7 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void  findByNameWithIdNotEqual_withSameId_shouldReturnNoResult () {
-        optionalSociete = repository.findByTitleWithNotEquals(entity.getTitle(),entity.getId());
+        optionalSociete = repository.findByTitleWithIdNotEquals(entity.getTitle(),entity.getId());
         assertThat(optionalSociete)
                 .isNotNull()
                 .isNotPresent();

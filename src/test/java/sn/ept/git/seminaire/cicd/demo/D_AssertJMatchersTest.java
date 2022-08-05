@@ -7,8 +7,11 @@ import org.assertj.core.data.Index;
 import org.assertj.core.util.Files;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
@@ -104,31 +107,36 @@ class D_AssertJMatchersTest {
          class Dog {
             public String name;
             public double weight;
+            public Color color;
             public double random;
 
-             public Dog(String name, double weight) {
+             public Dog(String name, double weight,Color color) {
                  this.name = name;
                  this.weight = weight;
+                 this.color = color;
                  this.random= RandomUtils.nextDouble();
              }
          }
 
-        Dog dog = new Dog("Fido", 5.25);
-        Dog dogClone = new Dog("Fido", 5.25);
+        Dog whiteDog = new Dog("Riki", 5.25, Color.WHITE);
+        Dog grayDog = new Dog("Riki", 5.25, Color.GRAY);
 
-        assertThat(dog)
-                .isNotEqualTo(dogClone);
+        assertThat(whiteDog)
+                .isNotEqualTo(grayDog)
+                .isNotSameAs(grayDog);
 
-        assertThat(dog)
+        assertThat(whiteDog)
                 .usingRecursiveComparison()
-                .ignoringFields("random")
-                .isEqualTo(dogClone);
+                .ignoringFields("random", "color")
+                .isEqualTo(grayDog);
     }
 
 
     @Test
     void test_directory() {
         File dir= Files.newTemporaryFolder();
+        //dir.setReadable(true);
+        //dir.setWritable(true);
         assertThat(dir)
                 .exists()
                 .isDirectory()
@@ -140,11 +148,12 @@ class D_AssertJMatchersTest {
     @Test
     void test_file() {
         File file= Files.newTemporaryFile();
+        file.setReadable(true);
+        file.setWritable(false);
         assertThat(file)
                 .exists()
                 .isFile()
-                .canRead()
-                .canWrite();
+                .canRead();
 
     }
 

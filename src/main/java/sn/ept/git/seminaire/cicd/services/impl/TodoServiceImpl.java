@@ -84,7 +84,7 @@ public class TodoServiceImpl implements ITodoService {
     @Transactional
     @Override
     public TodoDTO update(UUID uuid, TodoVM vm) {
-         Optional<Todo>  optional = repository.findByTitleWithNotEquals(vm.getTitle(),uuid);
+         Optional<Todo>  optional = repository.findByTitleWithIdNotEquals(vm.getTitle(),uuid);
         ExceptionUtils.absentOrThrow(optional, ItemExistsException.TITLE_EXISTS, vm.getTitle());
         optional = repository.findById(uuid);
         if(optional.isPresent()){

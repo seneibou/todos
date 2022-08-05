@@ -5,7 +5,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
+import sn.ept.git.seminaire.cicd.data.TestData;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
@@ -13,6 +16,8 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.mappers.TagMapper;
 import sn.ept.git.seminaire.cicd.mappers.vm.TagVMMapper;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,6 +106,68 @@ class TagServiceTest extends ServiceBaseTest {
         );
     }
 
+
+
+
+    @Test
+    void update_shouldSucceed() {
+        dto =service.save(vm);
+        vm.setName(TestData.Update.name);
+        vm.setDescription(TestData.Update.description);
+        dto =  service.update(dto.getId(), vm);
+        assertThat(dto)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("name",vm.getName())
+                .hasFieldOrPropertyWithValue("description",vm.getDescription());
+    }
+
+
+    @Test
+    void update_withBadId_shouldThrowException() {
+        dto =service.save(vm);
+        vm.setName(TestData.Update.name);
+        vm.setDescription(TestData.Update.description);
+        UUID id =UUID.randomUUID();
+        assertThrows(
+                ItemNotFoundException.class,
+                () ->service.update(id, vm)
+        );
+    }
+
+    @Test
+    void update_withDuplicatedName_shouldThrowException() {
+        dto =service.save(vm);
+        UUID id =UUID.randomUUID();
+        assertThrows(
+                ItemExistsException.class,
+                () ->service.update(id, vm)
+        );
+    }
+
+
+
+
+    @Test
+    void findAll_shouldReturnResult() {
+        dto =service.save(vm);
+        final List<TagDTO> all = service.findAll();
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1)
+                .contains(dto);
+    }
+
+    @Test
+    void findAllPageable_shouldReturnResult() {
+        dto =service.save(vm);
+        final Page<TagDTO> all = service.findAll(PageRequest.of(0,10));
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1)
+                .contains(dto);
+    }
 
 
 }

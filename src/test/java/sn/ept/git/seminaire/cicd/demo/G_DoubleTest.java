@@ -21,7 +21,7 @@ import static org.mockito.AdditionalAnswers.returnsSecondArg;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-class F_DoubleTest {
+class G_DoubleTest {
 
     //annotations @Mock,@Spy, ... or static methods
     private ICalculator mockCalculator = mock(ICalculator.class);

@@ -11,13 +11,14 @@ public final class Validator {
     public static final String FREE = "FREE";
     public static final String EXPRESSO = "EXPRESSO";
     public static final String PROMOBILE = "PROMOBILE";
-    public static final String REGEX="^(\\+221|00221)?(33|70|75|76|77|78)[0-9]{7}$";
+
+    public static final String REGEX="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
 
     private Validator(){
         super();
     }
 
-    public static boolean validatePhone(String phone) {
+    public static boolean validateMobilePhone(String phone) {
         Pattern pattern =Pattern.compile(REGEX);
         return pattern.matcher(phone).matches();
     }

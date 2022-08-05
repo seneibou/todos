@@ -30,6 +30,16 @@
         <sonar.scm.proider>git</sonar.scm.proider>
         <sonar.login>admin</sonar.login>
         <sonar.password>admin1234</sonar.password>
+        <sonar.exclusions>
+            src/main/java/sn/ept/git/seminaire/cicd/models/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/dto/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/base/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/vm/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/exceptions/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/exceptions/handler/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/exceptions/message/*.java,\
+            src/main/java/sn/ept/git/seminaire/cicd/utils/*.java,\
+        </sonar.exclusions>
     </properties>
 
     <dependencies>
@@ -61,6 +71,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

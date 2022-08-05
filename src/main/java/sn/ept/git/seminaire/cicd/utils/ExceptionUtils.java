@@ -2,12 +2,7 @@ package sn.ept.git.seminaire.cicd.utils;
 
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
-import sn.ept.git.seminaire.cicd.models.BaseEntity;
-
-import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author ISENE

@@ -109,4 +109,10 @@ class A_CalculatorTest {
         assertThat(result).isEqualTo(expected);
     }
 
+
+    @Disabled
+    @Test
+    void testDisabled() {
+    }
+
 }
