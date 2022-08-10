@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class TagResourceTest extends BasicResourceTest {
 
-    static private TagVM vm;
     @Autowired
     private ITagService service;
     private TagDTO dto;
+    static private TagVM vm;
 
 
     @BeforeAll

@@ -18,13 +18,12 @@ public final class Validator {
         super();
     }
 
-    public static boolean validateMobilePhone(String phone) {
-        Pattern pattern =Pattern.compile(REGEX);
-        return pattern.matcher(phone).matches();
+    public static boolean validateSnMobilePhone(String phone) {
+       return false;
     }
 
 
-    public static String getMobileOperator(String phone) throws BadPhoneException {
+    public static String getSnMobileOperator(String phone) throws BadPhoneException {
         String result;
         Pattern r = Pattern.compile(REGEX);
         Matcher matcher = r.matcher(phone);

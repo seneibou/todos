@@ -9,6 +9,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import sn.ept.git.seminaire.cicd.demo.exception.BadPhoneException;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -105,12 +106,14 @@ class E_FirstPrincipalTest {
         MyFileReader fileReader = Mockito.mock(MyFileReader.class);
 
         @BeforeEach
-        void beforeEach() {
-            Mockito.when(fileReader.read(ArgumentMatchers.anyString())).thenReturn(lines);
+        void beforeEach() throws IOException {
+            Mockito
+                    .when(fileReader.read(ArgumentMatchers.anyString()))
+                    .thenReturn(lines);
         }
 
         @Test
-        void addShouldReturnLinesOfAGivenFile() {
+        void addShouldReturnLinesOfAGivenFile() throws IOException {
             String path ="my_file.txt";
 
             List<String> result = fileReader.read(path);
@@ -184,7 +187,6 @@ class E_FirstPrincipalTest {
                 of("+221", "71", number),
                 of("+221", "70", number.substring(0, 5)),
                 of("+221", "70", number.concat("2")),
-                //+22170n876543
                 of("+221", "70", number.replace("9", "n"))
         );
     }
@@ -423,13 +425,8 @@ class E_FirstPrincipalTest {
         void getMobileOperator_shouldReturnCorrectOperator(
                 String indicatif, String operator, String expected
         ) {
-            //
             phone = String.format(template, indicatif, operator, number);
-
-            //
-            String result = Validator.getMobileOperator(phone);
-
-            //
+            String result = Validator.getSnMobileOperator(phone);
             assertThat(result).isEqualTo(expected);
         }
 
@@ -440,10 +437,9 @@ class E_FirstPrincipalTest {
                 String indicatif, String operator, String number
         ) {
             phone = String.format(template, indicatif, operator, number);
-
             assertThrows(
                     BadPhoneException.class,
-                    () -> Validator.getMobileOperator(phone)
+                    () -> Validator.getSnMobileOperator(phone)
             );
         }
 

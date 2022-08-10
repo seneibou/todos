@@ -1,16 +1,10 @@
 package sn.ept.git.seminaire.cicd.demo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import sn.ept.git.seminaire.cicd.demo.exception.BadPhoneException;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,10 +14,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 @Slf4j
 class F_TDD {
 
-
-
     static Stream<Arguments> phonesStates() {
-        String number = "9876543";
         return Stream.of(
                 of("00221779876543",true),
                 of("+221779876543",true),
@@ -73,7 +64,7 @@ class F_TDD {
     @ParameterizedTest
     @MethodSource("phonesStates")
     void shouldValidatePhonesNumbers(String phone, boolean isValid) {
-        assertThat(Validator.validateMobilePhone(phone)).isEqualTo(isValid);
+        assertThat(Validator.validateSnMobilePhone(phone)).isEqualTo(isValid);
     }
 
 }

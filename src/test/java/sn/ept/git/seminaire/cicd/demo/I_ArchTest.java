@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
-class H_ArchTest {
+
+class I_ArchTest {
 
     public static final String BASE = "sn.ept.git.seminaire.cicd";
     public static final String SERVICES = BASE.concat(".services..");
@@ -24,12 +25,13 @@ class H_ArchTest {
     static void init() {
         importedClasses = new ClassFileImporter()
                 .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+                .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_ARCHIVES)
                 .importPackages(BASE);
     }
 
 
     @Test
-    void servicesAndRepositoriesShouldNotDependOnWebLayer() {
+    void servicesComponentsAndRepositoriesShouldNotDependOnWebLayer() {
         noClasses()
                 .that()
                 .resideInAnyPackage(SERVICES, SERVICES_IMPL)
@@ -56,6 +58,18 @@ class H_ArchTest {
                 .check(importedClasses);
     }
 
+    @Test
+    void resourcesShouldNotUseConcreteClassesOnServiceLayer() {
+        noClasses()
+                .that()
+                .resideInAPackage(RESOURCE)
+                .should()
+                .dependOnClassesThat()
+                .resideInAnyPackage(SERVICES_IMPL)
+                .because("Resources should use Interface in  Service layer")
+                .check(importedClasses);
+    }
+
 
     @Test
     void servicesShouldNotDependOnServiceLayer() {
@@ -66,6 +80,45 @@ class H_ArchTest {
                 .dependOnClassesThat()
                 .resideInAnyPackage(SERVICES_IMPL)
                 .because("Services should not depend on Service layer")
+                .check(importedClasses);
+    }
+
+
+    @Test
+    void servicesInterfacesShouldNotBeInServiceImplPackage() {
+        noClasses()
+                .that()
+                .resideInAnyPackage(SERVICES_IMPL)
+                .should()
+                .beInterfaces()
+                .because("Service Interfaces should not be inside service.impl package")
+                .check(importedClasses);
+    }
+
+
+
+
+    @Test
+    void servicesClassesShouldNotBeDirectlyInServicePackage() {
+        classes()
+                .that()
+                .resideInAnyPackage(SERVICES)
+                .and()
+                .haveSimpleNameEndingWith("Impl")
+                .should()
+                .resideInAPackage(SERVICES_IMPL)
+                .because("Service classes should not be directly inside service package")
+                .check(importedClasses);
+    }
+
+    @Test
+    void servicesClassesNamesShouldEndWithIImpl() {
+        classes()
+                .that()
+                .resideInAnyPackage(SERVICES_IMPL)
+                .should()
+                .haveSimpleNameEndingWith("Impl")
+                .because("Service classes' name should end with Impl")
                 .check(importedClasses);
     }
 
@@ -137,16 +190,7 @@ class H_ArchTest {
     }
 
 
-    @Test
-    void onlyDomaineClassesShouldBeAnnotatedWithWhere() {
-        classes()
-                .that()
-                .areAnnotatedWith(org.hibernate.annotations.Where.class)
-                .should()
-                .resideInAnyPackage(MODELS)
-                .because("Only entities should be annotated with @Where")
-                .check(importedClasses);
-    }
+
 
 
 }

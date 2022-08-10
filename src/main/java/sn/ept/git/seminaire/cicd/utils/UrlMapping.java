@@ -6,8 +6,6 @@ package sn.ept.git.seminaire.cicd.utils;
 public final class UrlMapping {
 
     public static final String BASE = "/api/";
-    public static final String ENABLE = "/enable";
-    public static final String DISABLE = "/disable";
     public static final String ID = "/{id}";
 
     private UrlMapping() {
@@ -21,7 +19,7 @@ public final class UrlMapping {
             super();
         }
 
-        public static final String BASE = UrlMapping.BASE + "todo";
+        public static final String BASE = UrlMapping.BASE + "todos";
         public static final String ALL = Todo.BASE;
         public static final String FIND_BY_ID = Todo.BASE + ID;
         public static final String ADD = Todo.BASE;
@@ -35,7 +33,7 @@ public final class UrlMapping {
             super();
         }
 
-        public static final String BASE = UrlMapping.BASE + "tools";
+        public static final String BASE = UrlMapping.BASE + "tags";
         public static final String ALL = Tag.BASE;
         public static final String FIND_BY_ID = Tag.BASE + ID;
         public static final String ADD = Tag.BASE;

@@ -23,7 +23,7 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     static TodoDTO dto;
     Todo entity;
-    Optional<Todo> optionalSociete;
+    Optional<Todo> optionalTodo;
 
     @BeforeAll
     static void beforeAll(){
@@ -39,8 +39,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_shouldReturnResult() {
-        optionalSociete = repository.findByTitle(entity.getTitle());
-        assertThat(optionalSociete)
+        optionalTodo = repository.findByTitle(entity.getTitle());
+        assertThat(optionalTodo)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -50,8 +50,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_withBadName_shouldReturnNotFound() {
-        optionalSociete = repository.findByTitle(UUID.randomUUID().toString());
-        assertThat(optionalSociete)
+        optionalTodo = repository.findByTitle(UUID.randomUUID().toString());
+        assertThat(optionalTodo)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -60,8 +60,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
     void findByName_afterDelete_shouldReturnNotFound() {
         entity.setDeleted(true);
         entity = repository.saveAndFlush(entity);
-        optionalSociete = repository.findByTitle(entity.getTitle());
-        assertThat(optionalSociete)
+        optionalTodo = repository.findByTitle(entity.getTitle());
+        assertThat(optionalTodo)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -69,8 +69,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByNameWithIdNotEqual_shouldReturnResult() {
-        optionalSociete = repository.findByTitleWithIdNotEquals(entity.getTitle(),UUID.randomUUID());
-        assertThat(optionalSociete)
+        optionalTodo = repository.findByTitleWithIdNotEquals(entity.getTitle(),UUID.randomUUID());
+        assertThat(optionalTodo)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -80,8 +80,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void  findByNameWithIdNotEqual_withSameId_shouldReturnNoResult () {
-        optionalSociete = repository.findByTitleWithIdNotEquals(entity.getTitle(),entity.getId());
-        assertThat(optionalSociete)
+        optionalTodo = repository.findByTitleWithIdNotEquals(entity.getTitle(),entity.getId());
+        assertThat(optionalTodo)
                 .isNotNull()
                 .isNotPresent();
     }

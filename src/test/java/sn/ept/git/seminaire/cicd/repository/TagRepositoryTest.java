@@ -22,7 +22,7 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     static TagDTO dto;
     Tag entity;
-    Optional<Tag> optionalSociete;
+    Optional<Tag> optionalTag;
 
     @BeforeAll
     static void beforeAll(){
@@ -38,8 +38,8 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_shouldReturnResult() {
-        optionalSociete = repository.findByName(entity.getName());
-        assertThat(optionalSociete)
+        optionalTag = repository.findByName(entity.getName());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -49,8 +49,8 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_withBadName_shouldReturnNotFound() {
-        optionalSociete = repository.findByName(UUID.randomUUID().toString());
-        assertThat(optionalSociete)
+        optionalTag = repository.findByName(UUID.randomUUID().toString());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -59,8 +59,8 @@ class TagRepositoryTest extends RepositoryBaseTest {
     void findByName_afterDelete_shouldReturnNotFound() {
         entity.setDeleted(true);
         entity = repository.saveAndFlush(entity);
-        optionalSociete = repository.findByName(entity.getName());
-        assertThat(optionalSociete)
+        optionalTag = repository.findByName(entity.getName());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -68,8 +68,8 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByNameWithIdNotEqual_shouldReturnResult() {
-        optionalSociete = repository.findByNameWithIdNotEquals(entity.getName(),UUID.randomUUID());
-        assertThat(optionalSociete)
+        optionalTag = repository.findByNameWithIdNotEquals(entity.getName(),UUID.randomUUID());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -79,8 +79,8 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void  findByNameWithIdNotEqual_withSameId_shouldReturnNoResult () {
-        optionalSociete = repository.findByNameWithIdNotEquals(entity.getName(),entity.getId());
-        assertThat(optionalSociete)
+        optionalTag = repository.findByNameWithIdNotEquals(entity.getName(),entity.getId());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }

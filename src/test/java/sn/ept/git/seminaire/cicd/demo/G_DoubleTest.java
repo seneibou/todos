@@ -1,6 +1,8 @@
 package sn.ept.git.seminaire.cicd.demo;
 
 import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.*;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,16 +49,19 @@ class G_DoubleTest {
     void test_thenReturn() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .thenReturn(0.0);
-        double provided = mockCalculator.add(a, b);
         double expected = 0.0;
-        Assertions.assertThat(provided).isEqualTo(expected);
+        double result = mockCalculator.add(a, b);
+       assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void test_verify() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .then(returnsSecondArg());
-        mockCalculator.add(a, b);
+        double expected = 0.0;
+        double result = mockCalculator.add(a, b);
+       assertThat(result).isEqualTo(expected);
+
         verify(mockCalculator, times(1))
                 .add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble());
     }
@@ -74,10 +79,10 @@ class G_DoubleTest {
                         return Double.parseDouble(args[0].toString())+Double.parseDouble(args[1].toString());
                     }
                 });
-        double provided = mockCalculator.add(a, b);
+        double result = mockCalculator.add(a, b);
         double expected = a+b;
         Assertions
-                .assertThat(provided)
+                .assertThat(result)
                 .isEqualTo(expected);
     }
 
@@ -86,10 +91,10 @@ class G_DoubleTest {
     void test_then() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .then(returnsFirstArg());
-        double provided = mockCalculator.add(a, b);
+        double result = mockCalculator.add(a, b);
         double expected = a;
         Assertions
-                .assertThat(provided)
+                .assertThat(result)
                 .isEqualTo(expected);
     }
 
@@ -133,7 +138,8 @@ class G_DoubleTest {
         verify(spyList).add(item);
         Assertions
                 .assertThat(spyList)
-                .hasSize(1).containsExactly(item);
+                .hasSize(1)
+                .containsExactly(item);
     }
 
     @Test

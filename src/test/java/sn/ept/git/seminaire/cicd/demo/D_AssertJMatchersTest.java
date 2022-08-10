@@ -21,7 +21,6 @@ class D_AssertJMatchersTest {
     @Test
     void test_string_matchers() {
         String devise = "Sagesse devoir";
-
         assertThat(devise)
                 .as("If test fails display this message.")
                 .isEqualTo("Sagesse devoir")
@@ -158,3 +157,5 @@ class D_AssertJMatchersTest {
     }
 
 }
+
+
