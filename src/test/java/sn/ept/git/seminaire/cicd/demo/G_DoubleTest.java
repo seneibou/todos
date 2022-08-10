@@ -58,7 +58,7 @@ class G_DoubleTest {
     void test_verify() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .then(returnsSecondArg());
-        double expected = 0.0;
+        double expected = b;
         double result = mockCalculator.add(a, b);
        assertThat(result).isEqualTo(expected);
 

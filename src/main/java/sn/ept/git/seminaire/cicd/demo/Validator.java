@@ -2,25 +2,30 @@ package sn.ept.git.seminaire.cicd.demo;
 
 import sn.ept.git.seminaire.cicd.demo.exception.BadPhoneException;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Validator {
 
+    public static final String REGEX="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
     public static final String ORANGE = "ORANGE";
     public static final String FREE = "FREE";
     public static final String EXPRESSO = "EXPRESSO";
     public static final String PROMOBILE = "PROMOBILE";
 
-    public static final String REGEX="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
 
     private Validator(){
         super();
     }
 
+
+
     public static boolean validateSnMobilePhone(String phone) {
-       return false;
+        Pattern pattern =Pattern.compile(REGEX);
+        return pattern.matcher(phone).matches();
     }
+
 
 
     public static String getSnMobileOperator(String phone) throws BadPhoneException {
@@ -48,5 +53,9 @@ public final class Validator {
         }
         return result;
     }
-
+    
+    
+    public static Integer sumOfSquaresOfEvenNumbers(List<Integer> values) {
+        return 0;
+    }
 }

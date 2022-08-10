@@ -77,7 +77,7 @@ class E_FirstPrincipalTest {
         @Test
         void addShouldReturnTheSumOfTwoPositiveNumbers() {
             // un comment the following line ot change order of running
-             org.assertj.core.api.Assertions.fail("volontairement");
+             //org.assertj.core.api.Assertions.fail("volontairement");
             resultOne = calculator.add(a, b); //resultOne =33
             assertThat(resultOne).isEqualTo(33);
         }
