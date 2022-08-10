@@ -3,14 +3,13 @@ package sn.ept.git.seminaire.cicd.demo;
 
 public  class CurrencyConverter {
 
-      private final CurrencyService  converter;
+      private final CurrencyService  service;
 
-      public CurrencyConverter(CurrencyService converter) {
-            this.converter = converter;
+      public CurrencyConverter(CurrencyService service) {
+            this.service = service;
       }
 
       public  double convert(Currency from , Currency to, double value){
-            return converter.convert(from,to,value);
-
+            return service.convert(from,to,value);
       }
 }

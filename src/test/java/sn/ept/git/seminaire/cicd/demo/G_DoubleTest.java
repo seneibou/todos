@@ -36,7 +36,7 @@ class G_DoubleTest {
     private List<String> spyList = new ArrayList<>();
 
     private double a, b;
-    String item ="test data";
+    String item ="item to add";
 
     @BeforeEach
     void beforeEach() {
@@ -49,8 +49,9 @@ class G_DoubleTest {
     void test_thenReturn() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .thenReturn(0.0);
+
         double expected = 0.0;
-        double result = mockCalculator.add(a, b);
+        double result = mockCalculator.add(342, 122);
        assertThat(result).isEqualTo(expected);
     }
 
@@ -58,8 +59,9 @@ class G_DoubleTest {
     void test_verify() {
         when(mockCalculator.add(ArgumentMatchers.anyDouble(), ArgumentMatchers.anyDouble()))
                 .then(returnsSecondArg());
-        double expected = b;
-        double result = mockCalculator.add(a, b);
+
+        double expected = 1232;
+        double result = mockCalculator.add(2345, expected);
        assertThat(result).isEqualTo(expected);
 
         verify(mockCalculator, times(1))
@@ -79,8 +81,10 @@ class G_DoubleTest {
                         return Double.parseDouble(args[0].toString())+Double.parseDouble(args[1].toString());
                     }
                 });
-        double result = mockCalculator.add(a, b);
         double expected = a+b;
+
+        double result = mockCalculator.add(a, b);
+
         Assertions
                 .assertThat(result)
                 .isEqualTo(expected);
@@ -115,9 +119,16 @@ class G_DoubleTest {
     @Test
     void testMockList() {
         mockList.add(item);
+        mockList.size(); //taille de la liste
+
         Assertions
                 .assertThat(mockList)
                 .hasSize(0);
+
+        Assertions
+                .assertThat(mockList.size())
+                .isZero();
+
         verify(mockList).add(item);
     }
 
@@ -135,19 +146,23 @@ class G_DoubleTest {
     @Test
     public void testSpyList() {
         spyList.add(item);
-        verify(spyList).add(item);
+        spyList.add("value");
+
         Assertions
                 .assertThat(spyList)
-                .hasSize(1)
-                .containsExactly(item);
+                .hasSize(2)
+                //.containsExactly("value",item)
+                .containsExactlyInAnyOrder("value",item);
+
+        verify(spyList).add(item);
     }
 
     @Test
     public void testMockWithStub() {
         //stubbing a method
-        when(mockList.get(100)).thenReturn(item);
+        when(mockList.get(ArgumentMatchers.anyInt())).thenReturn(item);
         Assertions
-                .assertThat(mockList.get(100))
+                .assertThat(mockList.get(0))
                 .isEqualTo(item);
 
     }
