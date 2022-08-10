@@ -18,12 +18,20 @@ class F_TDD {
 
     static Stream<Arguments> testData() {
         return Stream.of(
-                of(Arrays.asList(1,2,0,3),4),
-                of(Arrays.asList(1,2,7,3),4),
+                of( Arrays.asList(1,2,0,3), 4),
+                of(Arrays.asList(1,2,7,3), 4),
                 of(Arrays.asList(1,2,9,3),4),
                 of(Arrays.asList(1,2,11,3),4),
+                of(Arrays.asList(1,2), 4),
+                of(Arrays.asList(2),4),
+                of(Arrays.asList(),0),
+                of(Arrays.asList(-1),0),
                 of(Arrays.asList(1,2,4,3),20),
-                of(Arrays.asList(1,2,4,6),56)
+                of(Arrays.asList(1,2,4,6),56),
+                of(Arrays.asList(0,2,4,8,1,3),84),
+                of(Arrays.asList(-1,-2,-4,-3),20),
+                of(Arrays.asList(-1,-2,-4,-6),56),
+                of(Arrays.asList(-0,-2,-4,-8,-1,-3),84)
         );
     }
 

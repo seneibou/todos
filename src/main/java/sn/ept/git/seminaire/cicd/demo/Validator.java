@@ -56,6 +56,11 @@ public final class Validator {
     
     
     public static Integer sumOfSquaresOfEvenNumbers(List<Integer> values) {
-        return 0;
+        return   values
+                .stream()
+                .filter(item->item%2==0)
+                .map(item->item*item)
+                .reduce(0,(a,b)->a+b);
+
     }
 }
