@@ -29,7 +29,7 @@
         <sonar.language>java</sonar.language>
         <sonar.scm.proider>git</sonar.scm.proider>
         <sonar.login>admin</sonar.login>
-        <sonar.password>admin12345</sonar.password>
+        <sonar.password>admin</sonar.password>
         <sonar.exclusions>
             src/main/java/sn/ept/git/seminaire/cicd/TodoApplication.java,\
             src/main/java/sn/ept/git/seminaire/cicd/models/*.java,\

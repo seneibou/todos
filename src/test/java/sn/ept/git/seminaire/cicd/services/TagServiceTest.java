@@ -31,7 +31,7 @@ class TagServiceTest extends ServiceBaseTest {
     @Autowired
     protected TagVMMapper vmMapper;
     @Autowired
-    TagRepository repositoy;
+    TagRepository repository;
     @Autowired
     ITagService service;
      static TagVM vm ;
@@ -91,9 +91,9 @@ class TagServiceTest extends ServiceBaseTest {
     @Test
     void delete_shouldDeleteSociete() {
         dto = service.save(vm);
-        long oldCount = repositoy.count();
+        long oldCount = repository.count();
         service.delete(dto.getId());
-        long newCount = repositoy.count();
+        long newCount = repository.count();
         assertThat(oldCount).isEqualTo(newCount+1);
     }
 
