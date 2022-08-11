@@ -1,0 +1,123 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Test
+      run: mvn test
+    
+    - name:  Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    
+    - name: "Quality Gate" 
+      id: sonarqube-quality-gate-check
+      uses: sonarsource/sonarqube-quality-gate-action@master
+      # Force to fail step after specific time.
+      timeout-minutes: 5
+      env:
+       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+   
+    - name: "Show Quality Gate"
+      run: |
+       echo "The Quality Gate is ${{ steps.sonarqube-quality-gate-check.outputs }}"
+       echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+          
+    - name: Build
+      run: mvn -B package --file pom.xml -DskipTests=true 
+      
+
+   # - name: Dockerize 
+   #   uses: mr-smithers-excellent/docker-build-push@v5
+   #   with:
+   #     image: ${{secrets.DOCKER_REGISTRY_IMAGE }} 
+   #     tags: ${{ github.sha }}, latest
+   #     registry: docker.io
+   #     dockerfile: Dockerfile
+   #     username: ${{ secrets.DOCKER_USERNAME }}
+   #     password: ${{ secrets.DOCKER_PASSWORD }}
+     
+    - name: Dockerize
+      run: |
+       docker login -u=${{secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }}
+       ls -ll
+       docker build -t ${{secrets.DOCKER_REGISTRY_IMAGE }}:${{ github.sha }} -t  ${{secrets.DOCKER_REGISTRY_IMAGE }}:latest .        # docker build -t image:tag1 -t image/tag2 -t image/tage3 .
+       #docker push ${{secrets.DOCKER_REGISTRY_IMAGE }}:latest # only push latest tag
+       docker push ${{secrets.DOCKER_REGISTRY_IMAGE }}:latest # push all tagsgitl
+
+
+    - name: Deploy dev
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.WEB_SERVER_IP }}
+        username: ${{ secrets.WEB_SERVER_USERNAME }}
+        key: ${{ secrets.WEB_SERVER_KEY }}
+        port: 22
+        script: |
+          mkdir -p ~/.ssh
+          touch  ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.WEB_SERVER_IP }} >> ~/.ssh/known_hosts
+          sudo sudo apt-get update
+          sudo apt install docker.io
+          docker --version
+          sudo docker container ls -aq --filter name=isene2 |xargs --no-run-if-empty sudo docker stop |xargs --no-run-if-empty sudo  docker container rm 
+          sudo docker run --name isene2  -d -p 80:8080 kor13za/cicd-docker-spring-boot:latest
+   
+   
+    - name: Wait for deploy to finish
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '30s'
+        
+    - name : Test deploy dev 
+      id: tes-deploy-dev
+      uses: indiesdev/curl@v1.1
+      with:
+          url: http://102.37.157.13/_health
+          method: "GET"
+          accept: 200
+          timeout: 5000
+          log-response: true
+          retries: 2
+          
+    - name: Show Test deploy response
+      run: echo ${{ steps.tes-deploy-dev.outputs.response }}
+   
+    - name: ZAP Scan
+      uses: zaproxy/action-baseline@v0.7.0
+      with:
+       target: 'http://102.37.157.13/_health'
+
+    - name: ZAP FULL Scan
+      uses: zaproxy/action-full-scan@v0.4.0
+      with:
+       target: 'http://102.37.157.13/_health'
+        
+      
+      
+      
+      
+      
