@@ -1,6 +1,7 @@
 package sn.ept.git.seminaire.cicd.mapper;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
@@ -26,7 +27,6 @@ class TagVMMapperTest extends MapperBaseTest {
     @Test
     void toEntityShouldReturnCorrectEntity() {
         entity = mapper.asEntity(vm);
-
         assertThat(entity)
                 .isNotNull()
                 .usingRecursiveComparison()
@@ -36,8 +36,7 @@ class TagVMMapperTest extends MapperBaseTest {
 
     @Test
     void toDTOShouldReturnCorrectDTO() {
-        entity = mapper.asEntity(vm);
-        vm = mapper.asDTO(entity);
+        vm = mapper.asDTO( mapper.asEntity(vm));
         assertThat(vm)
                 .isNotNull()
                 .hasNoNullFieldsOrProperties()

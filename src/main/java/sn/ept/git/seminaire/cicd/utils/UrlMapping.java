@@ -42,5 +42,16 @@ public final class UrlMapping {
     }
 
 
+    public static final class Default {
+
+        private Default() {
+            super();
+        }
+
+        public static final String HEALTH = "/_health";
+        public static final String INDEX = "/";
+    }
+
+
 
 }

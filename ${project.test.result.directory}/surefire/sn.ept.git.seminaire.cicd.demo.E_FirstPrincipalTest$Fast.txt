@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest$Fast
--------------------------------------------------------------------------------
-Tests run: 1000, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.769 s - in sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest$Fast
