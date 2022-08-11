@@ -16,7 +16,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @Slf4j
-public class H_CurrencyConverterTest {
+ class H_CurrencyConverterTest {
 
     private static final double coef = 1.25;
     private static CurrencyConverter converter;
@@ -77,7 +77,7 @@ public class H_CurrencyConverterTest {
 
     @ParameterizedTest
     @MethodSource("sameCurrentTestData")
-    public void sameCurrentShouldReturnSameValue(Currency from, Currency to, double input, double expected) {
+     void sameCurrentShouldReturnSameValue(Currency from, Currency to, double input, double expected) {
         double result = converter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);
     }
@@ -85,7 +85,7 @@ public class H_CurrencyConverterTest {
 
     @ParameterizedTest
     @MethodSource("differentCurrentTestData")
-    public void differentCurrentShouldReturnDifferentValue(Currency from, Currency to, double input, double expected) {
+     void differentCurrentShouldReturnDifferentValue(Currency from, Currency to, double input, double expected) {
         double result = converter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);
     }

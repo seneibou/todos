@@ -51,7 +51,7 @@ class ExceptionUtilsTest {
     void throwNotFound() {
         assertThrows(
                 ItemNotFoundException.class,
-                () -> ExceptionUtils.ThrowNotFound(template,param)
+                () -> ExceptionUtils.throwNotFound(template,param)
         );
     }
 }

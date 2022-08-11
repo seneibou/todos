@@ -6,7 +6,7 @@ import org.junit.jupiter.api.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class B_TripleAPrincipal {
+class B_TripleAPrincipalTest {
 
     private static ICalculator calculator;
     double a,b;

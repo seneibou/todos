@@ -15,7 +15,7 @@ public final class Utils {
     }
 
     public static boolean contains(Set<? extends BaseEntity> list, UUID id ) {
-        return list.stream().filter(item->item.getId().equals(id)).findFirst().isPresent();
+        return list.stream().anyMatch(item->item.getId().equals(id));
     }
 
 

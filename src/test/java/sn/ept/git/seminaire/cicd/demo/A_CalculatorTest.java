@@ -110,9 +110,10 @@ class A_CalculatorTest {
     }
 
 
-    @Disabled
+/*    @Disabled
     @Test
     void testDisabled() {
-    }
+        assertThat(Boolean.TRUE).isTrue();
+    }*/
 
 }

@@ -62,7 +62,7 @@ class C_JUnitMatchersTest {
 
     @DisplayName("Should be equal with delta")
     @Test
-    public void whenAssertingEqualityWithDelta_thenEqual() {
+    void whenAssertingEqualityWithDelta_thenEqual() {
         final float square = 2 * 2; // 4
         final float rectangle = 3 * 2; // 6
         // |6-4|=2
@@ -107,7 +107,7 @@ class C_JUnitMatchersTest {
 
 
     @Test
-    public void givenMultipleAssertion_whenAssertingAll_thenOK() {
+    void givenMultipleAssertion_whenAssertingAll_thenOK() {
         assertAll(
                 "heading",
                 () -> assertEquals(4, 2 * 2, "4 is 2 times 2"),
@@ -153,7 +153,7 @@ class C_JUnitMatchersTest {
         final String message = assertTimeout(
                 Duration.ofMillis(500),
                 () -> {
-                    Thread.sleep(5);
+                    //Thread.sleep(5);
                     return VALUE;
                 }
       );
@@ -161,7 +161,7 @@ class C_JUnitMatchersTest {
     }
 
     @Test
-    public void givenTwoLists_whenAssertingIterables_thenEquals() {
+    void givenTwoLists_whenAssertingIterables_thenEquals() {
         Iterable<String> one = new ArrayList<>(Arrays.asList("Java", "Junit", "Matchers"));
         Iterable<String> two = new LinkedList<>(Arrays.asList("Java", "Junit", "Matchers"));
         assertIterableEquals(one, two);
@@ -178,7 +178,7 @@ class C_JUnitMatchersTest {
         A{n,m}	A occurs at least n times but less than m times
     */
     @Test
-    public void whenAssertingEqualityListOfStrings_thenEqual() {
+    void whenAssertingEqualityListOfStrings_thenEqual() {
         List<String> expected = Arrays.asList("[a-zA-Z]+", "[0-9]+", "JUnit", "^(\\+221|00221)?(33|78|77|76|75|70)[0-9]{7}$");
         List<String> actual = Arrays.asList("GIT", "11", "JUnit", "+221762236160");
         assertLinesMatch(expected, actual);

@@ -118,18 +118,10 @@ class G_DoubleTest {
      */
     @Test
     void testMockList() {
+        int expected =0;
         mockList.add(item);
-        mockList.size(); //taille de la liste
-
-        Assertions
-                .assertThat(mockList)
-                .hasSize(0);
-
-        Assertions
-                .assertThat(mockList.size())
-                .isZero();
-
         verify(mockList).add(item);
+         assertThat(mockList).hasSize(expected);
     }
 
     /**
@@ -144,7 +136,7 @@ class G_DoubleTest {
      *
      */
     @Test
-    public void testSpyList() {
+    void testSpyList() {
         spyList.add(item);
         spyList.add("value");
 
@@ -158,7 +150,7 @@ class G_DoubleTest {
     }
 
     @Test
-    public void testMockWithStub() {
+    void testMockWithStub() {
         //stubbing a method
         when(mockList.get(ArgumentMatchers.anyInt())).thenReturn(item);
         Assertions
@@ -168,7 +160,7 @@ class G_DoubleTest {
     }
 
     @Test
-    public void testSpyWithStub() {
+    void testSpyWithStub() {
         //stubbing a spy method will result the same as the mock object
         //take note of using doReturn instead of when
         doReturn(item).when(spyList).get(300);

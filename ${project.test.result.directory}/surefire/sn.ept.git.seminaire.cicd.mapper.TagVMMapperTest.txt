@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: sn.ept.git.seminaire.cicd.mapper.TagVMMapperTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.759 s - in sn.ept.git.seminaire.cicd.mapper.TagVMMapperTest

@@ -30,7 +30,7 @@ public final class ExceptionUtils {
     }
 
 
-    public static  void ThrowNotFound(String template, String ... params){
+    public static  void throwNotFound(String template, String ... params){
             throw new ItemNotFoundException(
                     ItemNotFoundException.format(template, params)
             );

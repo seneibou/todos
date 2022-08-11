@@ -29,8 +29,9 @@
         <sonar.language>java</sonar.language>
         <sonar.scm.proider>git</sonar.scm.proider>
         <sonar.login>admin</sonar.login>
-        <sonar.password>admin1234</sonar.password>
+        <sonar.password>admin12345</sonar.password>
         <sonar.exclusions>
+            src/main/java/sn/ept/git/seminaire/cicd/TodoApplication.java,\
             src/main/java/sn/ept/git/seminaire/cicd/models/*.java,\
             src/main/java/sn/ept/git/seminaire/cicd/dto/*.java,\
             src/main/java/sn/ept/git/seminaire/cicd/base/*.java,\
@@ -236,6 +237,21 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <runOrder>alphabetical</runOrder>
+                    <threadCount>10</threadCount>
+                    <parallel>class</parallel>
+                    <reuseForks>tue</reuseForks>
+                    <argLine>${jacocoArgLine}</argLine>
+                    <reportsDirectory>${project.test.result.directory}/surefire</reportsDirectory>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 @Slf4j
-class F_TDD {
+class F_TDDTest {
 
     static Stream<Arguments> testData() {
         return Stream.of(
@@ -37,7 +37,7 @@ class F_TDD {
 
     @ParameterizedTest
     @MethodSource("testData")
-    void shouldReturnSumOfSquaresOfEvenNumbers(List<Integer> values, long result) {
+    void shouldReturnSumOfSquaresOfEvenNumbers(List<Integer> values, Integer result) {
         assertThat(Validator.sumOfSquaresOfEvenNumbers(values)).isEqualTo(result);
     }
 

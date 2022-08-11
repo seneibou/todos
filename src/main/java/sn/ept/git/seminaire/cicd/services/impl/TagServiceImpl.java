@@ -7,7 +7,6 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.mappers.TagMapper;
 import sn.ept.git.seminaire.cicd.mappers.vm.TagVMMapper;
 import sn.ept.git.seminaire.cicd.models.Tag;
-import sn.ept.git.seminaire.cicd.models.Todo;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
