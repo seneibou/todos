@@ -31,7 +31,7 @@ class TagResourceTest extends BasicResourceTest {
     @Autowired
     private ITagService service;
     private TagDTO dto;
-    static private TagVM vm;
+     private TagVM vm;
 
 
     @BeforeAll

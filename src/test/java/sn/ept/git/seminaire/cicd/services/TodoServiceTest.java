@@ -27,38 +27,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /*@SqlGroup({
-        @Sql("classpath:0_doto_data_test.sql"),
-        @Sql("classpath:1_doto_data_test.sql"),
+        @Sql("classpath:0_todo_data_test.sql"),
+        @Sql("classpath:1_todo_data_test.sql"),
 })*/
 @Slf4j
 class TodoServiceTest extends ServiceBaseTest {
 
     @Autowired
-    protected TodoMapper mapper;
-    @Autowired
-    protected TodoVMMapper vmMapper;
-    @Autowired
     TodoRepository todoRepository;
     @Autowired
     ITodoService service;
-    Optional<Todo> societe;
-     static TodoVM vm ;
+
+      TodoVM vm ;
     TodoDTO dto;
+    //should consider tags
 
 
     @BeforeAll
     static void beforeAll(){
         log.info(" before all");
-        vm = TodoVMTestData.defaultVM();
     }
 
     @BeforeEach
      void beforeEach(){
        log.info(" before each");
+        vm = TodoVMTestData.defaultVM();
     }
 
     @Test
-    void save_shouldSaveSociete() {
+    void save_shouldSaveTodo() {
         dto =service.save(vm);
         assertThat(dto)
                 .isNotNull()
@@ -154,7 +151,7 @@ class TodoServiceTest extends ServiceBaseTest {
     }
 
     @Test
-    void delete_shouldDeleteSociete() {
+    void delete_shouldDeleteTodo() {
         dto = service.save(vm);
         long oldCount = todoRepository.count();
         service.delete(dto.getId());

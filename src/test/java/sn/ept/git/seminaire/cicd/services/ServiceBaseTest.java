@@ -18,9 +18,9 @@ class ServiceBaseTest {
 
 
     @Test
-    void defaultPageShouldBePositive() {
+    void defaultPageShouldBeNull() {
         assertThat(PAGE.getPageNumber())
-                .isNotNegative()
+                .isZero()
                 .isEqualTo(DEFAULT_PAGE);
     }
 
@@ -28,7 +28,7 @@ class ServiceBaseTest {
     @Test
     void defaultSizeShouldBePositive() {
         assertThat(PAGE.getPageSize())
-                .isNotNegative()
+                .isPositive()
                 .isEqualTo(DEFAULT_SIZE);
     }
 

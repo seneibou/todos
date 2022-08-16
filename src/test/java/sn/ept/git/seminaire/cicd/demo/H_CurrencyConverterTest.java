@@ -19,6 +19,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
  class H_CurrencyConverterTest {
 
     private static final double coef = 1.25;
+    private static final double   value =12;
     private static CurrencyConverter converter;
     private  static CurrencyService  mock;
 
@@ -28,8 +29,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
         converter = new CurrencyConverter(mock);
     }
 
-    static Stream<Arguments> sameCurrentTestData() {
-        double value =12;
+    static Stream<Arguments> sameCurrenciesTestData() {
         return Stream.of(
                 of(Currency.USD, Currency.USD, value, value),
                 of(Currency.EURO, Currency.EURO, value, value),
@@ -39,8 +39,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
     }
 
 
-    static Stream<Arguments> differentCurrentTestData() {
-        double value =12;
+    static Stream<Arguments> differentCurrenciesTestData() {
         return Stream.of(
                 of(Currency.USD, Currency.EURO, value, value*coef),
                 of(Currency.USD, Currency.XAF, value, value*coef),
@@ -76,7 +75,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
     }
 
     @ParameterizedTest
-    @MethodSource("sameCurrentTestData")
+    @MethodSource("sameCurrenciesTestData")
      void sameCurrentShouldReturnSameValue(Currency from, Currency to, double input, double expected) {
         double result = converter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);
@@ -84,7 +83,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
     @ParameterizedTest
-    @MethodSource("differentCurrentTestData")
+    @MethodSource("differentCurrenciesTestData")
      void differentCurrentShouldReturnDifferentValue(Currency from, Currency to, double input, double expected) {
         double result = converter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);

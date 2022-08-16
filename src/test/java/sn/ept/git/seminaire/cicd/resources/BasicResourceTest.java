@@ -13,7 +13,6 @@ import sn.ept.git.seminaire.cicd.TodoApplication;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = {TodoApplication.class}
-
 )
 @AutoConfigureMockMvc
 @Transactional

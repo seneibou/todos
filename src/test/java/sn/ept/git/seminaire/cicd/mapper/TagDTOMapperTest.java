@@ -2,7 +2,7 @@ package sn.ept.git.seminaire.cicd.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mapstruct.factory.Mappers;
 import sn.ept.git.seminaire.cicd.data.TagDTOTestData;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.mappers.TagMapper;
@@ -10,13 +10,12 @@ import sn.ept.git.seminaire.cicd.models.Tag;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TagDTOMapperTest extends  MapperBaseTest{
+class TagDTOMapperTest {
 
     TagDTO dto;
     Tag entity;
 
-    @Autowired
-    private TagMapper mapper;
+    private TagMapper mapper =  Mappers.getMapper(TagMapper.class);
 
 
     @BeforeEach

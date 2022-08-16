@@ -27,10 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class TodoResourceTest extends BasicResourceTest {
 
-    static private TodoVM vm;
+
     @Autowired
     private ITodoService service;
     private TodoDTO dto;
+     private TodoVM vm;
+
+    //should consider tags
 
 
     @BeforeAll

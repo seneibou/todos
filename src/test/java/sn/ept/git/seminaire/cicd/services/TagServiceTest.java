@@ -13,41 +13,37 @@ import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
-import sn.ept.git.seminaire.cicd.mappers.TagMapper;
-import sn.ept.git.seminaire.cicd.mappers.vm.TagVMMapper;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 class TagServiceTest extends ServiceBaseTest {
 
-    @Autowired
-    protected TagMapper mapper;
-    @Autowired
-    protected TagVMMapper vmMapper;
+
     @Autowired
     TagRepository repository;
     @Autowired
     ITagService service;
 
-     static TagVM vm ;
+      TagVM vm ;
     TagDTO dto;
 
 
     @BeforeAll
     static void beforeAll(){
         log.info(" before all");
-        vm = TagVMTestData.defaultVM();
     }
 
     @BeforeEach
      void beforeEach(){
        log.info(" before each");
+        vm = TagVMTestData.defaultVM();
     }
 
 

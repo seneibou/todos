@@ -1,9 +1,8 @@
 package sn.ept.git.seminaire.cicd.mapper;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mapstruct.factory.Mappers;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.mappers.vm.TagVMMapper;
@@ -11,13 +10,12 @@ import sn.ept.git.seminaire.cicd.models.Tag;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TagVMMapperTest extends MapperBaseTest {
+class TagVMMapperTest {
 
     static TagVM vm;
     static Tag entity;
 
-    @Autowired
-    private TagVMMapper mapper;
+    private TagVMMapper mapper  =  Mappers.getMapper(TagVMMapper.class);
 
     @BeforeAll
     static void beforeAll() {
