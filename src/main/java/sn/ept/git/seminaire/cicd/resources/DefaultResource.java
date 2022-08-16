@@ -18,7 +18,7 @@ public class DefaultResource {
     }
 
     @GetMapping(UrlMapping.Default.HEALTH)
-    public ResponseEntity<String> _health() {
+    public ResponseEntity<String> health() {
         return ResponseEntity
                 .ok()
                 .body(HEALTH_MSG);
