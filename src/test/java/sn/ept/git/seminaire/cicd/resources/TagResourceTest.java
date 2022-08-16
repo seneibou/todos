@@ -7,15 +7,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import sn.ept.git.seminaire.cicd.data.TestData;
+import sn.ept.git.seminaire.cicd.data.TagDTOTestData;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
+import sn.ept.git.seminaire.cicd.data.TestData;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
+
 import java.util.UUID;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,11 +44,14 @@ class TagResourceTest extends BasicResourceTest {
         log.info(" before each ");
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
+        dto = TagDTOTestData.defaultDTO();
+
     }
 
     @Test
     void findAll_shouldReturnTags() throws Exception {
         dto = service.save(vm);
+
         mockMvc.perform(get(UrlMapping.Tag.ALL)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -60,12 +66,15 @@ class TagResourceTest extends BasicResourceTest {
                 .andExpect(jsonPath("$.content.[0].description").value(dto.getDescription()))
         ;
 
+
+
     }
 
 
     @Test
     void findById_shouldReturnTag() throws Exception {
         dto = service.save(vm);
+
         mockMvc.perform(get(UrlMapping.Tag.FIND_BY_ID, dto.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -80,7 +89,8 @@ class TagResourceTest extends BasicResourceTest {
 
     @Test
     void findById_withBadId_shouldReturnNotFound() throws Exception {
-        mockMvc.perform(get(UrlMapping.Tag.FIND_BY_ID, UUID.randomUUID().toString())
+        UUID id =UUID.randomUUID();
+        mockMvc.perform(get(UrlMapping.Tag.FIND_BY_ID, id.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -106,6 +116,7 @@ class TagResourceTest extends BasicResourceTest {
     @Test
     void add_withTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception {
         vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+
         mockMvc.perform(post(UrlMapping.Tag.ADD)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.convertObjectToJsonBytes(vm)))
@@ -182,4 +193,8 @@ class TagResourceTest extends BasicResourceTest {
         ).andExpect(status().isNotFound());
     }
 
+
+    //java 8 requis, maven requis (si wrapper non utilisé)
+
+    //vos tests ici
 }

@@ -34,6 +34,7 @@ class TagServiceTest extends ServiceBaseTest {
     TagRepository repository;
     @Autowired
     ITagService service;
+
      static TagVM vm ;
     TagDTO dto;
 
@@ -49,18 +50,24 @@ class TagServiceTest extends ServiceBaseTest {
        log.info(" before each");
     }
 
+
     @Test
-    void save_shouldSaveSociete() {
+    void save_shouldSaveTag() {
+        //A
+
+        //act
         dto =service.save(vm);
         assertThat(dto)
                 .isNotNull()
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrProperties()
+                ;
     }
 
     @Test
     void save_withSameName_shouldThrowException() {
         dto =service.save(vm);
-        vm.setName(dto.getName());
+
+        //vm.setName(dto.getName());
         assertThrows(
                 ItemExistsException.class,
                 () -> service.save(vm)
@@ -89,11 +96,14 @@ class TagServiceTest extends ServiceBaseTest {
     }
 
     @Test
-    void delete_shouldDeleteSociete() {
+    void delete_shouldDeleteTag() {
         dto = service.save(vm);
         long oldCount = repository.count();
+
         service.delete(dto.getId());
+
         long newCount = repository.count();
+
         assertThat(oldCount).isEqualTo(newCount+1);
     }
 
@@ -112,9 +122,12 @@ class TagServiceTest extends ServiceBaseTest {
     @Test
     void update_shouldSucceed() {
         dto =service.save(vm);
+
         vm.setName(TestData.Update.name);
         vm.setDescription(TestData.Update.description);
+
         dto =  service.update(dto.getId(), vm);
+
         assertThat(dto)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("name",vm.getName())
@@ -168,6 +181,9 @@ class TagServiceTest extends ServiceBaseTest {
                 .hasSize(1)
                 .contains(dto);
     }
+
+
+    //vos tests ici
 
 
 }

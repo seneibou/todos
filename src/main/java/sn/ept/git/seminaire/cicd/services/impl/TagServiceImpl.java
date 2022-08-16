@@ -1,5 +1,10 @@
 package sn.ept.git.seminaire.cicd.services.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
@@ -10,11 +15,7 @@ import sn.ept.git.seminaire.cicd.models.Tag;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,16 +37,24 @@ public class TagServiceImpl implements ITagService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public TagDTO save(TagVM vm) {
+
         final Optional<Tag> optional = repository.findByName(vm.getName());
         ExceptionUtils.absentOrThrow(optional, ItemExistsException.NAME_EXISTS, vm.getName());
-        return mapper.asDTO(repository.saveAndFlush(vmMapper.asEntity(vm)));
+
+
+        return
+                mapper.asDTO(
+                        repository
+                                .saveAndFlush(vmMapper.asEntity(vm)
+                                )
+                );
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void delete(UUID uuid) {
         final Optional<Tag> optional = repository.findById(uuid);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             final Tag site = optional.get();
             site.setDeleted(true);
             repository.saveAndFlush(site);
@@ -83,16 +92,15 @@ public class TagServiceImpl implements ITagService {
     @Override
     public TagDTO update(UUID uuid, TagVM vm) {
 
-        Optional<Tag>  optional = repository.findByNameWithIdNotEquals(vm.getName(),uuid);
+        Optional<Tag> optional = repository.findByNameWithIdNotEquals(vm.getName(), uuid);
         ExceptionUtils.absentOrThrow(optional, ItemExistsException.TITLE_EXISTS, vm.getName());
         optional = repository.findById(uuid);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             final Tag item = optional.get();
             item.setName(vm.getName());
             item.setDescription(vm.getDescription());
             return mapper.asDTO(repository.saveAndFlush(item));
         }
-
 
         throw new ItemNotFoundException(
                 ItemNotFoundException.format(ItemNotFoundException.TAG_BY_ID, uuid.toString())
@@ -104,4 +112,28 @@ public class TagServiceImpl implements ITagService {
     public void deleteAll() {
         repository.deleteAll();
     }
+
+
+    @Transactional
+    @Override
+    public List<TagDTO> addALL(
+            List<TagVM> vms
+    ) {
+        //on décide volontairement d'appliquer la loi du tout ou rien
+        Optional<String> msg = vms
+                .stream()
+                .filter(item -> repository.findByName(item.getName()).isPresent())
+                .map(TagVM::getName)
+                .reduce( (a, b) -> a.concat(",\n<br>").concat(b));
+
+        ExceptionUtils.absentOrThrow(Optional.ofNullable(msg), ItemExistsException.NAME_EXISTS, msg.get());
+
+        return mapper.asDTOList(
+                repository.saveAll(
+                        vmMapper.asEntityList(vms)
+                )
+        );
+    }
+
+
 }

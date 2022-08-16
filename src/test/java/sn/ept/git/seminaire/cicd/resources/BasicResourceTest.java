@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.ept.git.seminaire.cicd.TodoApplication;
 
 
-@SpringBootTest(classes = {TodoApplication.class})
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        classes = {TodoApplication.class}
+
+)
 @AutoConfigureMockMvc
 @Transactional
 class BasicResourceTest {

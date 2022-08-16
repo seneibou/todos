@@ -37,6 +37,7 @@ public final class UrlMapping {
         public static final String ALL = Tag.BASE;
         public static final String FIND_BY_ID = Tag.BASE + ID;
         public static final String ADD = Tag.BASE;
+        public static final String ADD_ALL = Tag.BASE+"/_bulk";
         public static final String UPDATE = Tag.FIND_BY_ID;
         public static final String DELETE = Tag.FIND_BY_ID;
     }

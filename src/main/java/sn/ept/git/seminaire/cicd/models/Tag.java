@@ -20,9 +20,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = BaseEntity.CLAUSE)
+
+
 @Entity
 @Table(name="acicd_tags")
-@Where(clause = BaseEntity.CLAUSE)
+
 public class Tag extends BaseEntity implements Serializable {
 
     @NotBlank

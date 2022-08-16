@@ -15,8 +15,6 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
     @Query("select t from Tag  t where t.name=:name")
     Optional<Tag> findByName(@Param("name") String name);
 
-
-
     @Query("select t from Tag  t where t.name=:name and t.id<>:id")
     Optional<Tag> findByNameWithIdNotEquals(@Param("name") String name, @Param("id")  UUID id);
 }

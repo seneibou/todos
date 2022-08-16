@@ -18,7 +18,7 @@ public class BaseDTO implements Serializable {
 
     private UUID id;
     @JsonProperty(value = "created_date")
-    private Instant createdDate;
+    private Instant createdDate ;
 
     @JsonProperty(value = "last_modified_date")
     private Instant lastModifiedDate;

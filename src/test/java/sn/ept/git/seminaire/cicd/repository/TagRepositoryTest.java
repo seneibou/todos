@@ -38,7 +38,14 @@ class TagRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_shouldReturnResult() {
+
+        entity = mapper.asEntity(dto);
+        repository.deleteAll();
+
+        entity = repository.saveAndFlush(entity);
+
         optionalTag = repository.findByName(entity.getName());
+
         assertThat(optionalTag)
                 .isNotNull()
                 .isPresent()
