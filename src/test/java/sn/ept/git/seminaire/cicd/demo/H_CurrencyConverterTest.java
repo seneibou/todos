@@ -20,13 +20,18 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
     private static final double coef = 1.25;
     private static final double   value =12;
+    private static CurrencyConverter mockConverter;
+    private  static CurrencyService mockCurrencyService;
+    private  static CurrencyService  currencyService;
     private static CurrencyConverter converter;
-    private  static CurrencyService  mock;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
-        mock = Mockito.mock(CurrencyService.class);
-        converter = new CurrencyConverter(mock);
+        mockCurrencyService = Mockito.mock(CurrencyService.class);
+        mockConverter = new CurrencyConverter(mockCurrencyService);
+
+        currencyService = new CurrencyService();
+        converter = new CurrencyConverter(currencyService);
     }
 
     static Stream<Arguments> sameCurrenciesTestData() {
@@ -59,7 +64,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
     @BeforeEach
     void beforeEach() throws IOException {
         Mockito
-                .when(mock.convert(
+                .when(mockCurrencyService.convert(
                         ArgumentMatchers.any(Currency.class),
                         ArgumentMatchers.any(Currency.class),
                         ArgumentMatchers.anyDouble()
@@ -77,7 +82,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
     @ParameterizedTest
     @MethodSource("sameCurrenciesTestData")
      void sameCurrentShouldReturnSameValue(Currency from, Currency to, double input, double expected) {
-        double result = converter.convert(from, to, input);
+        double result = mockConverter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);
     }
 
@@ -85,8 +90,26 @@ import static org.junit.jupiter.params.provider.Arguments.of;
     @ParameterizedTest
     @MethodSource("differentCurrenciesTestData")
      void differentCurrentShouldReturnDifferentValue(Currency from, Currency to, double input, double expected) {
-        double result = converter.convert(from, to, input);
+        double result = mockConverter.convert(from, to, input);
         assertThat(result).isEqualTo(expected);
     }
 
+
+    //this test will fail if CurrencyService does not work
+    @ParameterizedTest
+    @MethodSource("sameCurrenciesTestData")
+    void _sameCurrentShouldReturnSameValue(Currency from, Currency to, double input, double expected) {
+        double result = converter.convert(from, to, input);
+        assertThat(result). isEqualTo(expected);
+    }
+
+
+
+    //this test will fail if CurrencyService does not work
+    @ParameterizedTest
+    @MethodSource("differentCurrenciesTestData")
+    void _differentCurrentShouldReturnDifferentValue(Currency from, Currency to, double input, double expected) {
+        double result = converter.convert(from, to, input);
+        assertThat(result).isNotEqualTo(expected);
+    }
 } 

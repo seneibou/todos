@@ -32,14 +32,12 @@ class E_FirstPrincipalTest {
 
     @BeforeAll
     static void beforeAll() {
-        log.info("Something to do before all tests");
         calculator = new Calculator();
         resultOne = 0;
     }
 
     @BeforeEach
     void beforeEach() {
-        log.info("Something to do before each test");
         a = 11;
         b = 22;
     }
@@ -424,7 +422,7 @@ class E_FirstPrincipalTest {
         @MethodSource("sn.ept.git.seminaire.cicd.demo.E_FirstPrincipalTest#valideMobilePhone")
         void getMobileOperator_shouldReturnCorrectOperator(
                 String indicatif, String operator, String expected
-        ) {
+        ) throws BadPhoneException {
             phone = String.format(template, indicatif, operator, number);
             String result = Validator.getSnMobileOperator(phone);
             assertThat(result).isEqualTo(expected);

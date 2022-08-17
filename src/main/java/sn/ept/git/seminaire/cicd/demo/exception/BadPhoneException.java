@@ -1,6 +1,6 @@
 package sn.ept.git.seminaire.cicd.demo.exception;
 
-public class BadPhoneException extends RuntimeException{
+public class BadPhoneException extends Exception{
     public BadPhoneException() {
         super();
     }

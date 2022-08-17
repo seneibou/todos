@@ -1,33 +1,32 @@
-package sn.ept.git.seminaire.cicd.repository;
+package sn.ept.git.seminaire.cicd.repositories;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import sn.ept.git.seminaire.cicd.data.TodoDTOTestData;
-import sn.ept.git.seminaire.cicd.dto.TodoDTO;
-import sn.ept.git.seminaire.cicd.mappers.TodoMapper;
-import sn.ept.git.seminaire.cicd.models.Todo;
-import sn.ept.git.seminaire.cicd.repositories.TodoRepository;
+import sn.ept.git.seminaire.cicd.data.TagDTOTestData;
+import sn.ept.git.seminaire.cicd.dto.TagDTO;
+import sn.ept.git.seminaire.cicd.mappers.TagMapper;
+import sn.ept.git.seminaire.cicd.models.Tag;
+
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TodoRepositoryTest extends RepositoryBaseTest {
+class TagRepositoryTest extends RepositoryBaseTest {
 
     @Autowired
-    private TodoMapper mapper;
+    private TagMapper mapper;
     @Autowired
-    private TodoRepository repository;
+    private TagRepository repository;
 
-    static TodoDTO dto;
-    Todo entity;
-    Optional<Todo> optionalTodo;
+    static TagDTO dto;
+    Tag entity;
+    Optional<Tag> optionalTag;
 
     @BeforeAll
     static void beforeAll(){
-        dto = TodoDTOTestData.defaultDTO();
+        dto = TagDTOTestData.defaultDTO();
     }
 
     @BeforeEach
@@ -39,8 +38,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_shouldReturnResult() {
-        optionalTodo = repository.findByTitle(entity.getTitle());
-        assertThat(optionalTodo)
+        optionalTag = repository.findByName(entity.getName());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -50,8 +49,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByName_withBadName_shouldReturnNotFound() {
-        optionalTodo = repository.findByTitle(UUID.randomUUID().toString());
-        assertThat(optionalTodo)
+        optionalTag = repository.findByName(UUID.randomUUID().toString());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -60,8 +59,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
     void findByName_afterDelete_shouldReturnNotFound() {
         entity.setDeleted(true);
         entity = repository.saveAndFlush(entity);
-        optionalTodo = repository.findByTitle(entity.getTitle());
-        assertThat(optionalTodo)
+        optionalTag = repository.findByName(entity.getName());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }
@@ -69,8 +68,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void findByNameWithIdNotEqual_shouldReturnResult() {
-        optionalTodo = repository.findByTitleWithIdNotEquals(entity.getTitle(),UUID.randomUUID());
-        assertThat(optionalTodo)
+        optionalTag = repository.findByNameWithIdNotEquals(entity.getName(),UUID.randomUUID());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isPresent()
                 .get()
@@ -80,8 +79,8 @@ class TodoRepositoryTest extends RepositoryBaseTest {
 
     @Test
     void  findByNameWithIdNotEqual_withSameId_shouldReturnNoResult () {
-        optionalTodo = repository.findByTitleWithIdNotEquals(entity.getTitle(),entity.getId());
-        assertThat(optionalTodo)
+        optionalTag = repository.findByNameWithIdNotEquals(entity.getName(),entity.getId());
+        assertThat(optionalTag)
                 .isNotNull()
                 .isNotPresent();
     }

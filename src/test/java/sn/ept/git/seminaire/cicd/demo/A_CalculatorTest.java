@@ -5,6 +5,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import sn.ept.git.seminaire.cicd.demo.exception.DivisionByZeroException;
+
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -21,14 +23,12 @@ class A_CalculatorTest {
 
     @BeforeAll
     static void beforeAll(){
-        log.info("Something to do before all tests");
         calculator = new Calculator();
         r = new Random();
     }
 
     @BeforeEach
       void beforeEach(){
-        log.info("Something to do before each test");
         a = 11;
         b = 22;
     }
@@ -65,7 +65,7 @@ class A_CalculatorTest {
     }
 
     @Test
-    void testDivide() {
+    void testDivide() throws DivisionByZeroException {
 
         expected =a/b;
 
@@ -78,7 +78,7 @@ class A_CalculatorTest {
     void divisionByZeroShouldThrowError() {
         b=0;
         assertThrows(
-                ArithmeticException.class,
+                DivisionByZeroException.class,
                 () -> calculator.divide(a,b)
         );
     }

@@ -124,9 +124,9 @@ public class TagServiceImpl implements ITagService {
                 .stream()
                 .filter(item -> repository.findByName(item.getName()).isPresent())
                 .map(TagVM::getName)
-                .reduce( (a, b) -> a.concat(",\n<br>").concat(b));
+                .reduce( (a, b) -> a.concat(",\n<br> ").concat(b));
 
-        ExceptionUtils.absentOrThrow(Optional.ofNullable(msg), ItemExistsException.NAME_EXISTS, msg.get());
+        ExceptionUtils.absentOrThrow(msg, ItemExistsException.NAME_EXISTS, "Le(s) tag(s) suivant(s) existe(ent): "+msg.orElse(""));
 
         return mapper.asDTOList(
                 repository.saveAll(

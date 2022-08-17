@@ -22,7 +22,7 @@ class C_JUnitMatchersTest {
     void shouldBeTrue() {
         boolean result = GIT_EPT.startsWith("G");
         assertTrue(result);
-        //with a message displayed is case of failure
+        //with a message displayed in case of failure
         result = GIT_EPT.endsWith("T");
         assertTrue(result, " Should end with t");
 

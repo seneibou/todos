@@ -24,11 +24,6 @@ class B_TripleAPrincipalTest {
          log.info(" one");
     }
 
-    @BeforeEach
-    void beforeEachTwo(){
-        log.info(" two");
-    }
-
     @Test
     void shouldRespectTripleAPrinciple() {
 

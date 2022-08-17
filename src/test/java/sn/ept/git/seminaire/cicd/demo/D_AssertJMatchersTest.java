@@ -6,6 +6,7 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Index;
 import org.assertj.core.util.Files;
 import org.junit.jupiter.api.Test;
+import sn.ept.git.seminaire.cicd.demo.exception.DivisionByZeroException;
 
 import java.awt.*;
 import java.io.File;
@@ -83,7 +84,7 @@ class D_AssertJMatchersTest {
         assertThatThrownBy(
                     () -> calculator.divide(1, 0)
                 )
-                .isInstanceOf(ArithmeticException.class)
+                .isInstanceOf(DivisionByZeroException.class)
                 .hasMessageContaining("zero")
                 .hasMessage(Calculator.DIVIDE_BY_ZERO);
     }

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public final class Validator {
 
-    public static final String REGEX="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
+    public static final String MOTIF="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
     public static final String ORANGE = "ORANGE";
     public static final String FREE = "FREE";
     public static final String EXPRESSO = "EXPRESSO";
@@ -20,17 +20,9 @@ public final class Validator {
     }
 
 
-
-    public static boolean validateSnMobilePhone(String phone) {
-        Pattern pattern =Pattern.compile(REGEX);
-        return pattern.matcher(phone).matches();
-    }
-
-
-
     public static String getSnMobileOperator(String phone) throws BadPhoneException {
         String result;
-        Pattern r = Pattern.compile(REGEX);
+        Pattern r = Pattern.compile(MOTIF,Pattern.CASE_INSENSITIVE);
         Matcher matcher = r.matcher(phone);
         if (!matcher.matches()) {
             throw new BadPhoneException("Bad phone " + phone);

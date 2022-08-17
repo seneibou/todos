@@ -1,5 +1,7 @@
 package sn.ept.git.seminaire.cicd.demo;
 
+import sn.ept.git.seminaire.cicd.demo.exception.DivisionByZeroException;
+
 public class Calculator implements ICalculator {
 
     public static final String DIVIDE_BY_ZERO = "Can not divide by zero";
@@ -20,9 +22,9 @@ public class Calculator implements ICalculator {
     }
 
     @Override
-    public double divide(double a, double b) throws ArithmeticException {
+    public double divide(double a, double b) throws DivisionByZeroException {
         if(b==0){
-            throw new ArithmeticException(DIVIDE_BY_ZERO);
+            throw new DivisionByZeroException(DIVIDE_BY_ZERO);
         }
         return a/b;
     }

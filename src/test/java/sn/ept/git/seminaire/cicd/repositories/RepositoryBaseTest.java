@@ -1,4 +1,4 @@
-package sn.ept.git.seminaire.cicd.repository;
+package sn.ept.git.seminaire.cicd.repositories;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

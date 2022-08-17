@@ -14,6 +14,8 @@ import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import sn.ept.git.seminaire.cicd.demo.exception.DivisionByZeroException;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +42,6 @@ class G_DoubleTest {
 
     @BeforeEach
     void beforeEach() {
-        log.info("Something to do before each test");
         a = 11;
         b = 22;
     }
@@ -103,12 +104,12 @@ class G_DoubleTest {
     }
 
     @Test
-    void test_thenThrow() {
+    void test_thenThrow() throws DivisionByZeroException {
         when(mockCalculator.divide(ArgumentMatchers.anyDouble(), ArgumentMatchers.eq(0.0)))
                 .thenThrow(ArithmeticException.class);
 
         assertThrows(
-                ArithmeticException.class,
+                Exception.class,
                 () -> mockCalculator.divide(a, 0.0)
         );
     }

@@ -1,10 +1,10 @@
 package sn.ept.git.seminaire.cicd.demo;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public  class CurrencyService {
 
-    Random r = new Random();
+    SecureRandom r = new SecureRandom();
 
     public double convert(Currency from, Currency to, double value){
         //appel du WS, valeur aléatoire volontaire
