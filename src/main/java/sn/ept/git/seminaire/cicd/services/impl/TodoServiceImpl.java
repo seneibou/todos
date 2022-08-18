@@ -1,5 +1,6 @@
 package sn.ept.git.seminaire.cicd.services.impl;
 
+import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.TodoDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TodoVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
@@ -7,6 +8,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.mappers.TodoMapper;
 import sn.ept.git.seminaire.cicd.mappers.vm.TodoVMMapper;
 import sn.ept.git.seminaire.cicd.models.Todo;
+import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import sn.ept.git.seminaire.cicd.repositories.TodoRepository;
 import sn.ept.git.seminaire.cicd.services.ITodoService;
 import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
@@ -25,11 +27,13 @@ import java.util.stream.Collectors;
 public class TodoServiceImpl implements ITodoService {
 
     private final TodoRepository repository;
+    private final TagRepository tagRepository;
     private final TodoMapper mapper;
     private final TodoVMMapper vmMapper;
 
-    public TodoServiceImpl(TodoRepository repository, TodoMapper mapper, TodoVMMapper vmMapper) {
+    public TodoServiceImpl(TodoRepository repository, TagRepository tagRepository, TodoMapper mapper, TodoVMMapper vmMapper) {
         this.repository = repository;
+        this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.vmMapper = vmMapper;
     }
@@ -39,7 +43,7 @@ public class TodoServiceImpl implements ITodoService {
     public TodoDTO save(TodoVM vm) {
          Optional<Todo> optional = repository.findByTitle(vm.getTitle());
         ExceptionUtils.absentOrThrow(optional, ItemExistsException.TITLE_EXISTS, vm.getTitle());
-
+        //should add tags
         return mapper.asDTO(repository.saveAndFlush(vmMapper.asEntity(vm)));
     }
 
@@ -92,6 +96,7 @@ public class TodoServiceImpl implements ITodoService {
             item.setTitle(vm.getTitle());
             item.setDescription(vm.getDescription());
             item.setCompleted(vm.isCompleted());
+            //should update tag
             return mapper.asDTO(repository.saveAndFlush(item));
         }
         throw new ItemNotFoundException(
@@ -104,4 +109,5 @@ public class TodoServiceImpl implements ITodoService {
     public void deleteAll() {
         repository.deleteAll();
     }
+
 }

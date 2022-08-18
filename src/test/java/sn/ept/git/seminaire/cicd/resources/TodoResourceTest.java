@@ -33,7 +33,7 @@ class TodoResourceTest extends BasicResourceTest {
     private TodoDTO dto;
      private TodoVM vm;
 
-    //should consider tags
+    //should consider tags in add and update methods
 
 
     @BeforeAll

@@ -40,7 +40,7 @@ class TodoServiceTest extends ServiceBaseTest {
 
       TodoVM vm ;
     TodoDTO dto;
-    //should consider tags
+    //should consider tags in add and update methods
 
 
     @BeforeAll
