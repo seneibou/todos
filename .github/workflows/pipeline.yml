@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java-Maven Simple Pipeline
 
 on:
   push:
@@ -27,15 +27,14 @@ jobs:
 
 
 #    - name: Scan
-#      run: mvn verify sonar:sonar -Dsonar.login=${{SONAR_USER_NAME}}  -Dsonar.password=${{SONAR_TOKEN}} -Dsonar.host.url=http://${{SONAR_HOST_IP}}
-
+#      run: mvn verify sonar:sonar -Dsonar.login=${{SONAR_USER_NAME}}  -Dsonar.password=${{SONAR_TOKEN}} -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
 
 
     - name:  Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
     
 
     - name: "Quality Gate" 
@@ -45,7 +44,7 @@ jobs:
       timeout-minutes: 5
       env:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-       SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }} #OPTIONAL
+       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
    
     - name: "Show Quality Gate"
       run: |
