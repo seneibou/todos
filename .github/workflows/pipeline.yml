@@ -24,13 +24,17 @@ jobs:
     - name: Test
       if : 1 > 2
       run: mvn test
-    
 
-    - name:  Scan
-      uses: sonarsource/sonarqube-scan-action@master
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }}
+
+    - name: Test
+      run: mvn verify sonar:sonar -Dsonar.usernmae
+
+
+#    - name:  Scan
+#      uses: sonarsource/sonarqube-scan-action@master
+#      env:
+#        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }}
     
 
     - name: "Quality Gate" 
