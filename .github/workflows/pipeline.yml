@@ -60,7 +60,8 @@ jobs:
    #     dockerfile: Dockerfile
    #     username: ${{ secrets.DOCKER_USERNAME }}
    #     password: ${{ secrets.DOCKER_PASSWORD }}
-     
+
+
     - name: Dockerize
       run: |
        docker login -u=${{secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }}
