@@ -22,7 +22,7 @@ jobs:
         
         
     - name: Test
-      if : 1 > 2
+      #if : 1 > 2
       run: mvn test
 
 
