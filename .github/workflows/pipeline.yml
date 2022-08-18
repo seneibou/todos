@@ -58,7 +58,7 @@ jobs:
        docker login -u=${{secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }}
        ls -ll
        docker build -t ${{secrets.DOCKER_REGISTRY_IMAGE }}:${{ github.sha }} -t  ${{secrets.DOCKER_REGISTRY_IMAGE }}:lts .        # docker build -t image:tag1 -t image:tag2 -t image:tage3 .
-       #docker push ${{secrets.DOCKER_REGISTRY_IMAGE }}:lts # only push lts tag
+       #docker push ${{secrets.DOCKER_REGISTRY_IMAGE }}:latest # only push latest tag
        docker push ${{secrets.DOCKER_REGISTRY_IMAGE }} # push all tags
 
 
@@ -77,7 +77,7 @@ jobs:
           sudo apt install docker.io
           docker --version
           sudo docker container ls -aq --filter name=cicdeptgitdic1 |xargs --no-run-if-empty sudo docker stop |xargs --no-run-if-empty sudo  docker container rm 
-          sudo docker run --name cicdeptgitdic1  -d -p 80:8080 kor13za/todos:lts
+          sudo docker run --name cicdeptgitdic1  -d -p 80:8080 kor13za/todos:latest
    
    
     - name: Wait for deploy to finish
