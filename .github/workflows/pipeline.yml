@@ -26,16 +26,16 @@ jobs:
       run: mvn test
 
 
-    - name: Scan
-      run: mvn verify sonar:sonar -Dsonar.login=admin  -Dsonar.password=admin -Dsonar.host.url=http://20.168.101.46
+#    - name: Scan
+#      run: mvn verify sonar:sonar -Dsonar.login=${{SONAR_USER_NAME}}  -Dsonar.password=${{SONAR_TOKEN}} -Dsonar.host.url=http://${{SONAR_HOST_IP}}
 
 
 
-#    - name:  Scan
-#      uses: sonarsource/sonarqube-scan-action@master
-#      env:
-#        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }}
+    - name:  Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: http://${{ secrets.SONAR_HOST_IP }}
     
 
     - name: "Quality Gate" 
