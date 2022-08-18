@@ -46,11 +46,6 @@ jobs:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
    
-    - name: "Show Quality Gate"
-      run: |
-       echo "The Quality Gate is ${{ steps.sonarqube-quality-gate-check.outputs }}"
-       echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-          
     - name: Build
       #run: mvn -B package --file pom.xml -DskipTests=true
       run: mvn -B package  -DskipTests=true
@@ -90,8 +85,8 @@ jobs:
           sudo sudo apt-get update
           sudo apt install docker.io
           docker --version
-          sudo docker container ls -aq --filter name=isene2 |xargs --no-run-if-empty sudo docker stop |xargs --no-run-if-empty sudo  docker container rm 
-          sudo docker run --name isene2  -d -p 80:8080 kor13za/cicd-docker-spring-boot:latest
+          sudo docker container ls -aq --filter name=cicdeptgitdic1 |xargs --no-run-if-empty sudo docker stop |xargs --no-run-if-empty sudo  docker container rm 
+          sudo docker run --name cicdeptgitdic1  -d -p 80:8080 kor13za/todos:lts
    
    
     - name: Wait for deploy to finish
