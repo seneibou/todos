@@ -194,7 +194,7 @@ class TagResourceTest extends BasicResourceTest {
     }
 
 
-    //java 8 requis, maven requis (si wrapper non utilisé)
+    //java 8 requis,
 
     //vos tests ici
 }
