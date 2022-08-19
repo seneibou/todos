@@ -7,7 +7,6 @@ import org.springframework.validation.annotation.Validated;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.base.BaseDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
-import sn.ept.git.seminaire.cicd.models.Tag;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.ResponseUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
@@ -59,7 +58,7 @@ public class TagResource {
     }
 
     @DeleteMapping(UrlMapping.Tag.DELETE)
-    public ResponseEntity<Tag> delete(@PathVariable("id") UUID id) {
+    public ResponseEntity<TagDTO> delete(@PathVariable("id") UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -75,8 +74,6 @@ public class TagResource {
 
     @PostMapping(UrlMapping.Tag.ADD_ALL)
     public ResponseEntity<List<TagDTO>> addALL(@RequestBody List<  @Valid TagVM> vms) {
-        System.out.println("enter add all method");
-        
         List<TagDTO >  created =  service.addALL(vms);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

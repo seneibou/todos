@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface ITodoService extends GenericService<TodoDTO, TodoVM, UUID> {
 
+    TodoDTO complete(UUID id);
 }

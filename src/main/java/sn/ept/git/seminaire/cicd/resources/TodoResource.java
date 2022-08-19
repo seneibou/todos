@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import sn.ept.git.seminaire.cicd.dto.TodoDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TodoVM;
-import sn.ept.git.seminaire.cicd.models.Todo;
 import sn.ept.git.seminaire.cicd.services.ITodoService;
 import sn.ept.git.seminaire.cicd.utils.ResponseUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
@@ -53,7 +52,7 @@ public class TodoResource {
     }
 
     @DeleteMapping(UrlMapping.Todo.DELETE)
-    public ResponseEntity<Todo> delete(@PathVariable("id") UUID id) {
+    public ResponseEntity<TodoDTO> delete(@PathVariable("id") UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -63,6 +62,14 @@ public class TodoResource {
             @PathVariable("id") UUID id,
             @RequestBody @Valid TodoVM vm) {
         final TodoDTO dto = service.update(id, vm);
+        Optional<TodoDTO> optional = Optional.ofNullable(dto);
+        return ResponseUtil.wrapOrNotFound(optional,HttpStatus.ACCEPTED);
+    }
+
+
+    @DeleteMapping(UrlMapping.Todo.COMPLETE)
+    public ResponseEntity<TodoDTO> complete(@PathVariable("id") UUID id) {
+        final TodoDTO dto = service.complete(id);
         Optional<TodoDTO> optional = Optional.ofNullable(dto);
         return ResponseUtil.wrapOrNotFound(optional,HttpStatus.ACCEPTED);
     }

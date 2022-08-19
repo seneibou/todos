@@ -1,6 +1,5 @@
 package sn.ept.git.seminaire.cicd.services.impl;
 
-import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.dto.TodoDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TodoVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
@@ -8,7 +7,6 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.mappers.TodoMapper;
 import sn.ept.git.seminaire.cicd.mappers.vm.TodoVMMapper;
 import sn.ept.git.seminaire.cicd.models.Todo;
-import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import sn.ept.git.seminaire.cicd.repositories.TodoRepository;
 import sn.ept.git.seminaire.cicd.services.ITodoService;
 import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
@@ -27,13 +25,11 @@ import java.util.stream.Collectors;
 public class TodoServiceImpl implements ITodoService {
 
     private final TodoRepository repository;
-    private final TagRepository tagRepository;
     private final TodoMapper mapper;
     private final TodoVMMapper vmMapper;
 
-    public TodoServiceImpl(TodoRepository repository, TagRepository tagRepository, TodoMapper mapper, TodoVMMapper vmMapper) {
+    public TodoServiceImpl(TodoRepository repository, TodoMapper mapper, TodoVMMapper vmMapper) {
         this.repository = repository;
-        this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.vmMapper = vmMapper;
     }
@@ -110,4 +106,17 @@ public class TodoServiceImpl implements ITodoService {
         repository.deleteAll();
     }
 
+    @Override
+    public TodoDTO complete(UUID uuid) {
+        final Optional<Todo> optional = repository.findById(uuid);
+        if(optional.isPresent()){
+            final Todo todo = optional.get();
+            todo.setCompleted(true);
+            repository.saveAndFlush(todo);
+            return mapper.asDTO(repository.saveAndFlush(todo));
+        }
+        throw new ItemNotFoundException(
+                ItemNotFoundException.format(ItemNotFoundException.TODO_BY_ID, uuid.toString())
+        );
+    }
 }
