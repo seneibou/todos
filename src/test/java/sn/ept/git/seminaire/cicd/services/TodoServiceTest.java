@@ -38,25 +38,24 @@ class TodoServiceTest extends ServiceBaseTest {
     @Autowired
     ITodoService service;
 
-      TodoVM vm ;
+    TodoVM vm;
     TodoDTO dto;
-    //should consider tags in add and update methods
-
+    // should consider tags in add and update methods
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         log.info(" before all");
     }
 
     @BeforeEach
-     void beforeEach(){
-       log.info(" before each");
+    void beforeEach() {
+        log.info(" before each");
         vm = TodoVMTestData.defaultVM();
     }
 
     @Test
     void save_shouldSaveTodo() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         assertThat(dto)
                 .isNotNull()
                 .hasNoNullFieldsOrProperties();
@@ -64,54 +63,48 @@ class TodoServiceTest extends ServiceBaseTest {
 
     @Test
     void save_withSameName_shouldThrowException() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         vm.setTitle(dto.getTitle());
         assertThrows(
                 ItemExistsException.class,
-                () -> service.save(vm)
-        );
+                () -> service.save(vm));
     }
-
 
     @Test
     void update_shouldSucceed() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         vm.setTitle(TestData.Update.title);
         vm.setDescription(TestData.Update.description);
-        dto =  service.update(dto.getId(), vm);
+        dto = service.update(dto.getId(), vm);
         assertThat(dto)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("title",vm.getTitle())
-                .hasFieldOrPropertyWithValue("description",vm.getDescription());
+                .hasFieldOrPropertyWithValue("title", vm.getTitle())
+                .hasFieldOrPropertyWithValue("description", vm.getDescription());
     }
-
 
     @Test
     void update_withBadId_shouldThrowException() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         vm.setTitle(TestData.Update.title);
         vm.setDescription(TestData.Update.description);
-        UUID id =UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         assertThrows(
                 ItemNotFoundException.class,
-                () ->service.update(id, vm)
-        );
+                () -> service.update(id, vm));
     }
 
     @Test
     void update_withDuplicatedName_shouldThrowException() {
-        dto =service.save(vm);
-        UUID id =UUID.randomUUID();
+        dto = service.save(vm);
+        UUID id = UUID.randomUUID();
         assertThrows(
                 ItemExistsException.class,
-                () ->service.update(id, vm)
-        );
+                () -> service.update(id, vm));
     }
-
 
     @Test
     void findAll_shouldReturnResult() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         final List<TodoDTO> all = service.findAll();
         assertThat(all)
                 .isNotNull()
@@ -122,8 +115,8 @@ class TodoServiceTest extends ServiceBaseTest {
 
     @Test
     void findAllPageable_shouldReturnResult() {
-        dto =service.save(vm);
-        final Page<TodoDTO> all = service.findAll(PageRequest.of(0,10));
+        dto = service.save(vm);
+        final Page<TodoDTO> all = service.findAll(PageRequest.of(0, 10));
         assertThat(all)
                 .isNotNull()
                 .isNotEmpty()
@@ -133,7 +126,7 @@ class TodoServiceTest extends ServiceBaseTest {
 
     @Test
     void findById_shouldReturnResult() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         final Optional<TodoDTO> optional = service.findById(dto.getId());
         assertThat(optional)
                 .isNotNull()
@@ -156,7 +149,7 @@ class TodoServiceTest extends ServiceBaseTest {
         long oldCount = todoRepository.count();
         service.delete(dto.getId());
         long newCount = todoRepository.count();
-        assertThat(oldCount).isEqualTo(newCount+1);
+        assertThat(oldCount).isEqualTo(newCount + 1);
     }
 
     @Test
@@ -164,14 +157,26 @@ class TodoServiceTest extends ServiceBaseTest {
         UUID id = UUID.randomUUID();
         assertThrows(
                 ItemNotFoundException.class,
-                () ->service.delete(id)
-        );
+                () -> service.delete(id));
     }
 
+    // java 8 requis,
 
-    //java 8 requis,
+    // vos tests ici
+    @Test
+    void complete_shouldCompleteTodo() {
+        dto = service.save(vm);
+        dto = service.complete(dto.getId());
+        assertThat(dto)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("completed", true);
+    }
 
-    //vos tests ici
-
+    @Test
+    void complete_withBadId_shouldThrowException() {
+        UUID id = UUID.randomUUID();
+        assertThrows(ItemNotFoundException.class,
+                () -> service.complete(id));
+    }
 
 }
