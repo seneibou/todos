@@ -3,6 +3,12 @@ package sn.ept.git.seminaire.cicd.data;
 
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public final class TagVMTestData extends TestData {
 
     public static TagVM defaultVM() {
@@ -17,6 +23,15 @@ public final class TagVMTestData extends TestData {
                 .name(Default.name)
                 .description(Default.description)
                 .build();
+    }
+
+    public static List<TagVM> defaultVMList() {
+        Random random = new Random();
+        int length = random.nextInt(4) + 1;
+        return Stream.iterate(0, (Integer i) -> i+1)
+                .limit(length)
+                .map(i -> TagVMTestData.defaultVM())
+                .collect(Collectors.toList());
     }
 
     public static TagVM updatedVM() {

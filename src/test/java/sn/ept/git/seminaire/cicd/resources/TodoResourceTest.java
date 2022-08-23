@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import sn.ept.git.seminaire.cicd.data.TodoVMTestData;
 import sn.ept.git.seminaire.cicd.data.TestData;
 import sn.ept.git.seminaire.cicd.dto.TodoDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TodoVM;
+import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.services.ITodoService;
 import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -180,16 +183,28 @@ class TodoResourceTest extends BasicResourceTest {
 
     @Test
     void delete_withBadId_shouldReturnNotFound() throws Exception {
-        dto = service.save(vm);
         mockMvc.perform(
                 delete(UrlMapping.Todo.DELETE, UUID.randomUUID().toString())
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound());
     }
 
+    @Test
+    void complete_shouldCompleteTodo() throws Exception {
+        dto = service.complete(service.save(vm).getId());
+        mockMvc.perform(
+                delete(UrlMapping.Todo.COMPLETE, dto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.completed").exists());
+    }
 
-
-    //java 8 requis,
-
-    //vos tests ici
+    @Test
+    void complete_withBadId_shouldThrowException() throws Exception {
+        mockMvc.perform(
+                delete(UrlMapping.Todo.COMPLETE, UUID.randomUUID().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound());
+    }
 }

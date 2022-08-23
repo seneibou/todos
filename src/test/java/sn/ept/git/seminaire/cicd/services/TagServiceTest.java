@@ -1,9 +1,7 @@
 package sn.ept.git.seminaire.cicd.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +15,7 @@ import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +31,10 @@ class TagServiceTest extends ServiceBaseTest {
     ITagService service;
 
       TagVM vm ;
+      List<TagVM> vms;
+
     TagDTO dto;
+    List<TagDTO> dtos;
 
 
     @BeforeAll
@@ -44,8 +46,8 @@ class TagServiceTest extends ServiceBaseTest {
      void beforeEach(){
        log.info(" before each");
         vm = TagVMTestData.defaultVM();
+        vms = TagVMTestData.defaultVMList();
     }
-
 
     @Test
     void save_shouldSaveTag() {
@@ -178,10 +180,27 @@ class TagServiceTest extends ServiceBaseTest {
                 .contains(dto);
     }
 
+    @Test
+    void saveAll_shouldSaveAllTags() {
+        // Arrange
 
-    //java 8 requis,
+        // Act
+        dtos =service.addALL(vms);
 
-    //vos tests ici
+        // Assert
+        assertThat(dtos)
+                .isNotNull()
+                .hasSameSizeAs(vms);
+    }
 
+    @Test
+    void saveAll_withSomeExistingName_shouldThrowException() {
+        dto =service.save(vm);
+        vms.add(vm);
+        assertThrows(
+                ItemExistsException.class,
+                () -> service.addALL(vms)
+        );
+    }
 
 }

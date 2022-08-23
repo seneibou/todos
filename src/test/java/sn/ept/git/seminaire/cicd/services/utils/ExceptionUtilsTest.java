@@ -1,7 +1,8 @@
-package sn.ept.git.seminaire.cicd.utils;
+package sn.ept.git.seminaire.cicd.services.utils;
 
 import org.junit.jupiter.api.Test;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
+import sn.ept.git.seminaire.cicd.utils.ExceptionUtils;
 
 import java.util.Optional;
 

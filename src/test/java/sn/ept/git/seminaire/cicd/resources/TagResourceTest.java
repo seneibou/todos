@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,16 +12,19 @@ import sn.ept.git.seminaire.cicd.data.TagDTOTestData;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
 import sn.ept.git.seminaire.cicd.data.TestData;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
+import sn.ept.git.seminaire.cicd.dto.base.TagBaseDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.services.ITagService;
 import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.Random;
 import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +36,7 @@ class TagResourceTest extends BasicResourceTest {
     private ITagService service;
     private TagDTO dto;
      private TagVM vm;
+     private List<TagVM> vms;
 
 
     @BeforeAll
@@ -44,6 +49,7 @@ class TagResourceTest extends BasicResourceTest {
         log.info(" before each ");
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
+        vms = TagVMTestData.defaultVMList();
         dto = TagDTOTestData.defaultDTO();
 
     }
@@ -193,8 +199,55 @@ class TagResourceTest extends BasicResourceTest {
         ).andExpect(status().isNotFound());
     }
 
+    @Test
+    void addAll_shouldCreateAllTags() throws Exception {
 
-    //java 8 requis,
+        mockMvc.perform(
+                post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms))
+        )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$[*].id", hasSize(vms.size())))
+                .andExpect(jsonPath("$[*].version", hasSize(vms.size())))
+                .andExpect(jsonPath("$[*].enabled", hasSize(vms.size())))
+                .andExpect(jsonPath("$[*].deleted", hasSize(vms.size())))
+                .andExpect(jsonPath("$[*].name", is(
+                        vms
+                                .stream()
+                                .map(TagBaseDTO::getName)
+                                .collect(Collectors.toList())
+                )))
+                .andExpect(jsonPath("$[*].description", is(
+                        vms
+                                .stream()
+                                .map(TagBaseDTO::getDescription)
+                                .collect(Collectors.toList())
+                )));
+    }
 
-    //vos tests ici
+    @Test
+    void addAll_withSomeTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception {
+        Random random = new Random();
+        int position = random.nextInt(vms.size());
+        vms.get(position).setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms)))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void addAll_withSomeTitleMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+        Random random = new Random();
+        int position = random.nextInt(vms.size());
+        vms.get(position).setName(RandomStringUtils.randomAlphanumeric(SizeMapping.Name.MAX + 1));
+
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms)))
+                .andExpect(status().isInternalServerError());
+    }
+
 }

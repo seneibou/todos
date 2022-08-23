@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import sn.ept.git.seminaire.cicd.dto.TagDTO;
+import sn.ept.git.seminaire.cicd.dto.base.TagBaseDTO;
 import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
@@ -116,17 +117,15 @@ public class TagServiceImpl implements ITagService {
 
     @Transactional
     @Override
-    public List<TagDTO> addALL(
-            List<TagVM> vms
-    ) {
+    public List<TagDTO> addALL(List<TagVM> vms) {
         //on décide volontairement d'appliquer la loi du tout ou rien
         Optional<String> msg = vms
                 .stream()
-                .filter(item -> repository.findByName(item.getName()).isPresent())
-                .map(TagVM::getName)
+                .map(TagBaseDTO::getName)
+                .filter(name -> repository.findByName(name).isPresent())
                 .reduce( (a, b) -> a.concat(",\n<br> ").concat(b));
 
-        ExceptionUtils.absentOrThrow(msg, ItemExistsException.NAME_EXISTS, "Le(s) tag(s) suivant(s) existe(ent): "+msg.orElse(""));
+        ExceptionUtils.absentOrThrow(msg, ItemExistsException.NAME_EXISTS, "Le(s) tag(s) suivant(s) existe(ent): " +  msg.orElse(""));
 
         return mapper.asDTOList(
                 repository.saveAll(

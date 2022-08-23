@@ -28,12 +28,13 @@ import java.util.UUID;
 
 public class Tag extends BaseEntity implements Serializable {
 
+    // Name size from 2 to 50
     @NotBlank
     @Size(min = SizeMapping.Name.MIN,max = SizeMapping.Name.MAX)
     @Column(unique = true)
-    private  String name;
+    private String name;
 
-
+    // Description size from 0 to 255
     @Size(min = SizeMapping.Description.MIN,max = SizeMapping.Description.MAX)
     private  String description;
 

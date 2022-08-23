@@ -1,6 +1,12 @@
 package sn.ept.git.seminaire.cicd.data;
 
+import sn.ept.git.seminaire.cicd.dto.vm.TagVM;
 import sn.ept.git.seminaire.cicd.dto.vm.TodoVM;
+
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class TodoVMTestData extends TestData {
 

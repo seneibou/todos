@@ -26,11 +26,13 @@ import java.util.Set;
 @DynamicUpdate
 public class Todo extends BaseEntity implements Serializable {
 
+    // Title size from 2 to 80
     @NotBlank
     @Size(min = SizeMapping.Title.MIN, max = SizeMapping.Title.MAX)
     @Column(unique = true)
     private String title;
 
+    // Title size from 0 to 255
     @Size(min = SizeMapping.Description.MIN, max = SizeMapping.Description.MAX)
     private String description;
 

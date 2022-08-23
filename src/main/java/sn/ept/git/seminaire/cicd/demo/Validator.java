@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public final class Validator {
 
-    public static final String MOTIF="^(\\+221|00221)?(70|75|76|77|78)[0-9]{7}$";
+    public static final String MOTIF="^(\\+221|00221)?(70|75|76|77|78)\\d{7}$";
     public static final String ORANGE = "ORANGE";
     public static final String FREE = "FREE";
     public static final String EXPRESSO = "EXPRESSO";
