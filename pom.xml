@@ -41,6 +41,9 @@
             src/main/java/sn/ept/git/seminaire/cicd/dto/**.java,\
         </sonar.exclusions>
 
+	<sonar.organization>elimanesall</sonar.organization>
+  	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
     </properties>
 
 
