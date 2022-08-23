@@ -25,56 +25,54 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 class TagServiceTest extends ServiceBaseTest {
 
-
     @Autowired
     TagRepository repository;
     @Autowired
     ITagService service;
 
-      TagVM vm ;
+    TagVM vm;
     TagDTO dto;
-
+    List<TagDTO> Listdto;
+    List<TagVM> li;
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         log.info(" before all");
     }
 
     @BeforeEach
-     void beforeEach(){
-       log.info(" before each");
+    void beforeEach() {
+        log.info(" before each");
         vm = TagVMTestData.defaultVM();
+        li.add(TagVMTestData.defaultVM());
+        li.add(TagVMTestData.defaultVM());
+        li.add(TagVMTestData.defaultVM());
     }
-
 
     @Test
     void save_shouldSaveTag() {
-        //A
+        // A
 
-        //act
-        dto =service.save(vm);
+        // act
+        dto = service.save(vm);
         assertThat(dto)
                 .isNotNull()
-                .hasNoNullFieldsOrProperties()
-                ;
+                .hasNoNullFieldsOrProperties();
     }
 
     @Test
     void save_withSameName_shouldThrowException() {
-        dto =service.save(vm);
+        dto = service.save(vm);
 
-        //vm.setName(dto.getName());
+        // vm.setName(dto.getName());
         assertThrows(
                 ItemExistsException.class,
-                () -> service.save(vm)
-        );
+                () -> service.save(vm));
     }
-
-
 
     @Test
     void findById_shouldReturnResult() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         final Optional<TagDTO> optional = service.findById(dto.getId());
         assertThat(optional)
                 .isNotNull()
@@ -100,7 +98,7 @@ class TagServiceTest extends ServiceBaseTest {
 
         long newCount = repository.count();
 
-        assertThat(oldCount).isEqualTo(newCount+1);
+        assertThat(oldCount).isEqualTo(newCount + 1);
     }
 
     @Test
@@ -108,57 +106,47 @@ class TagServiceTest extends ServiceBaseTest {
         UUID id = UUID.randomUUID();
         assertThrows(
                 ItemNotFoundException.class,
-                () ->service.delete(id)
-        );
+                () -> service.delete(id));
     }
-
-
-
 
     @Test
     void update_shouldSucceed() {
-        dto =service.save(vm);
+        dto = service.save(vm);
 
         vm.setName(TestData.Update.name);
         vm.setDescription(TestData.Update.description);
 
-        dto =  service.update(dto.getId(), vm);
+        dto = service.update(dto.getId(), vm);
 
         assertThat(dto)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("name",vm.getName())
-                .hasFieldOrPropertyWithValue("description",vm.getDescription());
+                .hasFieldOrPropertyWithValue("name", vm.getName())
+                .hasFieldOrPropertyWithValue("description", vm.getDescription());
     }
-
 
     @Test
     void update_withBadId_shouldThrowException() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         vm.setName(TestData.Update.name);
         vm.setDescription(TestData.Update.description);
-        UUID id =UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         assertThrows(
                 ItemNotFoundException.class,
-                () ->service.update(id, vm)
-        );
+                () -> service.update(id, vm));
     }
 
     @Test
     void update_withDuplicatedName_shouldThrowException() {
-        dto =service.save(vm);
-        UUID id =UUID.randomUUID();
+        dto = service.save(vm);
+        UUID id = UUID.randomUUID();
         assertThrows(
                 ItemExistsException.class,
-                () ->service.update(id, vm)
-        );
+                () -> service.update(id, vm));
     }
-
-
-
 
     @Test
     void findAll_shouldReturnResult() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         final List<TagDTO> all = service.findAll();
         assertThat(all)
                 .isNotNull()
@@ -169,20 +157,33 @@ class TagServiceTest extends ServiceBaseTest {
 
     @Test
     void findAllPageable_shouldReturnResult() {
-        dto =service.save(vm);
-        final Page<TagDTO> all = service.findAll(PageRequest.of(0,10));
+        dto = service.save(vm);
+        final Page<TagDTO> all = service.findAll(PageRequest.of(0, 10));
         assertThat(all)
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(1)
                 .contains(dto);
     }
+
+    // java 8 requis,
+
+    // vos tests ici
+    @Test
+    void AddALL_shouldSaveTag() {
+        Listdto = service.addALL(li);
+        assertThat(Listdto)
+                .isNotNull();
     }
 
+    @Test
+    void save_withSameName_shouldThrowException() {
+        Listdto = service.save(li);
 
-    //java 8 requis,
-
-    //vos tests ici
-
+        // vm.setName(dto.getName());
+        assertThrows(
+                ItemExistsException.class,
+                () -> service.save(li));
+    }
 
 }
