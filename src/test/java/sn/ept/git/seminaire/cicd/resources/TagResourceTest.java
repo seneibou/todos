@@ -1,5 +1,7 @@
 package sn.ept.git.seminaire.cicd.resources;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,6 +34,7 @@ class TagResourceTest extends BasicResourceTest {
     private ITagService service;
     private TagDTO dto;
      private TagVM vm;
+    
 
 
     @BeforeAll
@@ -192,9 +195,53 @@ class TagResourceTest extends BasicResourceTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound());
     }
+    
+    
 
 
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void addAll_shouldCreateAllTags() throws Exception {
+        List <TagVM> vms = new ArrayList<>();
+        vms.add(vm);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.[0].id").exists())
+                .andExpect(jsonPath("$.[0].version").exists())
+                .andExpect(jsonPath("$.[0].enabled").exists())
+                .andExpect(jsonPath("$.[0].deleted").exists())
+                .andExpect(jsonPath("$.[0].name").value(vm.getName()))
+                .andExpect(jsonPath("$.[0].description").value(vm.getDescription()))
+        ;
+    }
+    
+    @Test
+    void addAll_withTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception {
+        List <TagVM> vms = new ArrayList<>();
+        vms.add(vm);
+        vms.get(0).setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms.get(0))))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void addAll_withTitleMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+        List <TagVM> vms = new ArrayList<>();
+        vms.add(vm);
+        vms.get(0).setName(RandomStringUtils.random(SizeMapping.Name.MAX + 1));
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms.get(0))))
+                .andExpect(status().isBadRequest());
+    }
+
 }
