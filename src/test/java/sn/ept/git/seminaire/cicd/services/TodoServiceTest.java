@@ -174,7 +174,9 @@ class TodoServiceTest extends ServiceBaseTest {
     //vos tests ici
     @Test
     void testComplete_shoulSucceed() {
-       
+       dto = service.save(vm);
+       dto = service.complete(dto.getId());
+       assertThat(dto.isCompleted()).isTrue();
                 
     }
 
