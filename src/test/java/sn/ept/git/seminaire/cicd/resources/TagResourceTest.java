@@ -29,20 +29,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TagResourceTest extends BasicResourceTest {
 
     @Autowired
-    private ITagService service;
-    private TagDTO dto;
-     private TagVM vm;
+    TagRepository repository;
+    @Autowired
+    ITagService service;
+
+    TagVM vm ;
+    TagDTO dto;
+    List<TagVM> vms = new ArrayList<>();
+
+
 
 
     @BeforeAll
-    static void beforeAll() {
-        log.info(" before all ");
+    static void beforeAll(){
+        log.info(" before all");
     }
 
     @BeforeEach
     void beforeEach() {
-        log.info(" before each ");
-        service.deleteAll();
+        log.info(" before each");
         vm = TagVMTestData.defaultVM();
         dto = TagDTOTestData.defaultDTO();
 
@@ -194,7 +199,19 @@ class TagResourceTest extends BasicResourceTest {
     }
 
 
-    //java 8 requis,
+    //java 8 requis, maven requis (si wrapper non utilisé)
+   @Test
+    void addAll() throws Exception {
+        vms.add(vm);
+         mockMvc.perform(
+    post(UrlMapping.Tag.ADD_ALL)
+            .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+            )
+                 .andExpect(status().isCreated())
 
+        ;
+         
+    }
     //vos tests ici
 }

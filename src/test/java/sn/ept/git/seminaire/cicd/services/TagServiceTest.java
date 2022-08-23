@@ -25,14 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 class TagServiceTest extends ServiceBaseTest {
 
-
-    @Autowired
+   @Autowired
     TagRepository repository;
     @Autowired
     ITagService service;
 
-      TagVM vm ;
+    TagVM vm ;
     TagDTO dto;
+    List<TagVM> vms = new ArrayList<>();
+
+
 
 
     @BeforeAll
@@ -41,10 +43,10 @@ class TagServiceTest extends ServiceBaseTest {
     }
 
     @BeforeEach
-     void beforeEach(){
-       log.info(" before each");
+    void beforeEach() {
+        log.info(" before each");
         vm = TagVMTestData.defaultVM();
-    }
+}
 
 
     @Test
@@ -177,11 +179,24 @@ class TagServiceTest extends ServiceBaseTest {
                 .hasSize(1)
                 .contains(dto);
     }
+
+    @Test
+    void addAll_ReturnResult(){
+        vms.add(vm);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
     }
 
-
-    //java 8 requis,
-
+    @Test
+    void addAll_shouldThrowException() {
+        dto =service.save(vm);
+        vms.add(vm);
+        assertThrows(
+                ItemExistsException.class,
+                () ->service.addALL(vms)
+        );
+    }
     //vos tests ici
 
 

@@ -40,7 +40,7 @@ class TodoServiceTest extends ServiceBaseTest {
 
       TodoVM vm ;
     TodoDTO dto;
-    //should consider tags in add and update methods
+    //should consider tags
 
 
     @BeforeAll
@@ -169,9 +169,26 @@ class TodoServiceTest extends ServiceBaseTest {
     }
 
 
-    //java 8 requis,
+   @Test
+    void complete_shouldSucceed() {
+        dto =service.save(vm);
+        dto =  service.complete(dto.getId());
+        assertThat(dto)
+                .isNotNull();
 
-    //vos tests ici
+    }
+
+    @Test
+    void complete_withBadId_shouldThrowException() {
+        dto =service.save(vm);
+        UUID id =UUID.randomUUID();
+        assertThrows(
+                ItemNotFoundException.class,
+                () ->service.complete(id)
+        );
+    }
+
+
 
 
 }

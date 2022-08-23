@@ -33,7 +33,7 @@ class TodoResourceTest extends BasicResourceTest {
     private TodoDTO dto;
      private TodoVM vm;
 
-    //should consider tags in add and update methods
+    //should consider tags
 
 
     @BeforeAll
@@ -188,8 +188,18 @@ class TodoResourceTest extends BasicResourceTest {
     }
 
 
+   @Test
+    void complete_CompleteTodo() throws Exception {
+        dto = service.save(vm);
+        mockMvc.perform(
+                        delete(UrlMapping.Todo.COMPLETE, dto.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
 
-    //java 8 requis,
+                )
+                .andExpect(status().isAccepted())
+        ;
+    }
 
-    //vos tests ici
+
+
 }
