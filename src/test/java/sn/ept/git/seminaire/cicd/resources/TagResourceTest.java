@@ -190,7 +190,14 @@ class TagResourceTest extends BasicResourceTest {
                                 post(UrlMapping.Tag.ADD_ALL)
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(TestUtil.convertObjectToJsonBytes(vms)))
-                                .andExpect(status().isCreated());
+                                .andExpect(status().isCreated())
+                                .andExpect(jsonPath("$[0].id").exists())
+                                .andExpect(jsonPath("$[0].version").exists())
+                                .andExpect(jsonPath("$[0].enabled").exists())
+                                .andExpect(jsonPath("$[0].deleted").exists())
+                                .andExpect(jsonPath("$[0].name").value(vms.get(0).getName()))
+                                .andExpect(jsonPath("$[0].description").value(vms.get(0).getDescription()))
+                                .andExpect(jsonPath("$.size()").value(1));
 
         }
 
