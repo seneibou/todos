@@ -18,6 +18,8 @@ import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -197,4 +199,18 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addAll_shouldCreateTags() throws Exception{
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        
+        mockMvc.perform(
+                post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms))
+                
+                )
+                .andExpect(status().isCreated());
+              
+    }
 }

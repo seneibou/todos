@@ -173,5 +173,12 @@ class TodoServiceTest extends ServiceBaseTest {
 
     //vos tests ici
 
-
+@Test
+void complete() throws Exception{
+    dto = service.save(vm);
+        TodoDTO dtos = service.complete(dto.getId());
+         assertThat(dtos)
+                .isNotNull()
+                ;
+}
 }

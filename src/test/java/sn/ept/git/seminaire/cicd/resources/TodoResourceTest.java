@@ -1,5 +1,6 @@
 package sn.ept.git.seminaire.cicd.resources;
 
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,12 +18,14 @@ import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
 import java.util.UUID;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import sn.ept.git.seminaire.cicd.dto.TagDTO;
 
 @Slf4j
 class TodoResourceTest extends BasicResourceTest {
@@ -192,4 +195,22 @@ class TodoResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void complete_shouldCompleteTodo() throws Exception{
+        dto = service.save(vm);
+         mockMvc.perform(
+                delete(UrlMapping.Todo.COMPLETE,dto.getId())
+                       .contentType(MediaType.APPLICATION_JSON))
+                       .andExpect(status().isAccepted())
+                       .andExpect(jsonPath("$.id").exists())
+                       .andExpect(jsonPath("$.version").exists())
+                       .andExpect(jsonPath("$.enabled").exists())
+                       .andExpect(jsonPath("$.deleted").exists())
+                       .andExpect(jsonPath("$.title").value(vm.getTitle()))
+                       .andExpect(jsonPath("$.description").value(vm.getDescription()));
+                 
+                
+               
+        
+    }
 }

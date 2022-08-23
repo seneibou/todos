@@ -16,6 +16,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -182,6 +183,15 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addAll_shouldSaveTags() throws Exception{
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        List<TagDTO> dtos = service.addALL(vms);
+        assertThat(dtos)
+                .isNotNull()
+                ;
+    }
 
 
 }
