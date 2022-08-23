@@ -1,5 +1,6 @@
 package sn.ept.git.seminaire.cicd.services;
 
+import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -182,6 +183,27 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void addALL_withouthDuplicates_shouldSucceed() {
+        List <TagVM> vms = new ArrayList<>();
+        List <TagDTO> dtos = new ArrayList<>();
+        vms.add(vm);
+        dtos = service.addALL(vms);
+        assertThat(dtos).isNotNull().isNotEmpty();
+    }
+
+    @Test
+    void addALL_withSameName_shouldThrowException() {
+        List <TagVM> vms = new ArrayList<>();
+        List <TagDTO> dtos = new ArrayList<>();
+        vms.add(vm);
+        dtos = service.addALL(vms);
+
+        assertThrows(
+                ItemExistsException.class,
+                () -> service.save(vm));
+    }
 
 
 }
