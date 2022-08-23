@@ -15,12 +15,13 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @Slf4j
 class TagServiceTest extends ServiceBaseTest {
@@ -182,6 +183,16 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+    public List<String> list;
+    @BeforeEach
+    public void before() {
+        // This the place where everything should be done to ensure a clean and
+        // consistent state of things to test
+        list = new ArrayList<String>();
+    }
+    @Test
+    void testAddALL() throws Exception {
+        
+    }
+    }
 
-
-}

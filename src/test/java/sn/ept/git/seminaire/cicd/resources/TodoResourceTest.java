@@ -192,4 +192,13 @@ class TodoResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void complete_should_success() throws Exception {
+        dto = service.save(vm);
+        mockMvc.perform(
+            delete(UrlMapping.Todo.COMPLETE, dto.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(vm))).andExpect(status().isAccepted());
+        
+    }
 }
