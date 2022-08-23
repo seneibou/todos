@@ -31,8 +31,10 @@ class TagServiceTest extends ServiceBaseTest {
     @Autowired
     ITagService service;
 
-      TagVM vm ;
+    TagVM vm ;
     TagDTO dto;
+    List<TagVM> li;
+    List<TagDTO> dt;
 
 
     @BeforeAll
@@ -44,6 +46,9 @@ class TagServiceTest extends ServiceBaseTest {
      void beforeEach(){
        log.info(" before each");
         vm = TagVMTestData.defaultVM();
+        li.add(TagVMTestData.defaultVM());
+        li.add(TagVMTestData.defaultVM());
+        li.add(TagVMTestData.defaultVM());
     }
 
 
@@ -182,6 +187,15 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+     void addAll_shouldSaveTag() {
+        //A
+        //act
+        
+        dt = service.addALL(li);
+        assertThat(dt)
+                .isNotNull()
+                ;
+    }
 
 
 }
