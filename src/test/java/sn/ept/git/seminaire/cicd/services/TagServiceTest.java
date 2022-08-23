@@ -170,7 +170,7 @@ class TagServiceTest extends ServiceBaseTest {
     void addALL_withouthDuplicates_shouldSucceed() {
         vms.add(vm);
         dtos = service.addALL(vms);
-        assertThat(dtos).isNotNull().isNotEmpty();
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
     }
 
     @Test
