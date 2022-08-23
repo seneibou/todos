@@ -82,5 +82,4 @@ public class TagResource {
                 .toUri();
         return ResponseEntity.created(location).body(created);
     }
-
 }

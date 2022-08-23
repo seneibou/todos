@@ -1,5 +1,7 @@
 package sn.ept.git.seminaire.cicd.resources;
 
+import java.util.LinkedList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +33,7 @@ class TagResourceTest extends BasicResourceTest {
     @Autowired
     private ITagService service;
     private TagDTO dto;
-     private TagVM vm;
+    private TagVM vm;
 
 
     @BeforeAll
@@ -197,4 +199,19 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void addAll_shouldAddTags() throws Exception {
+        List<TagVM> vmList =  new LinkedList<TagVM>( );
+        vmList.add(vm);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vmList))
+                )
+                .andExpect(status().isCreated())
+        ;
+    }
+    
+    
 }
