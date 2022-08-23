@@ -17,6 +17,8 @@ import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -27,11 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 class TagResourceTest extends BasicResourceTest {
-
     @Autowired
     private ITagService service;
     private TagDTO dto;
-     private TagVM vm;
+    private TagVM vm;
+    TagVM vm3 = new TagVM() ;
+    List<TagVM> vms = new ArrayList<>();
 
 
     @BeforeAll
@@ -45,9 +48,14 @@ class TagResourceTest extends BasicResourceTest {
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
         dto = TagDTOTestData.defaultDTO();
+        vm3.setId(UUID.randomUUID());
+        vm3.setVersion(2);
+        vm3.setName("rien");
+        vm3.setDescription("wedweddasdsddsds");
+        vm3.setDeleted(false);
+        vm3.setEnabled(true);
 
     }
-
     @Test
     void findAll_shouldReturnTags() throws Exception {
         dto = service.save(vm);
@@ -197,4 +205,22 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addAll_shouldAddAllTags() throws Exception {
+        vms.add(vm);
+        vms.add(vm3);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+                )
+                .andExpect(status().isCreated())
+
+        ;
+
+    }
+
+
+
+
 }

@@ -15,6 +15,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,8 +32,13 @@ class TagServiceTest extends ServiceBaseTest {
     @Autowired
     ITagService service;
 
-      TagVM vm ;
+    TagVM vm ;
+    TagVM vm2 ;
+    TagVM vm3 = new TagVM() ;
     TagDTO dto;
+    List<TagVM> vms = new ArrayList<>();
+
+
 
 
     @BeforeAll
@@ -41,9 +47,16 @@ class TagServiceTest extends ServiceBaseTest {
     }
 
     @BeforeEach
-     void beforeEach(){
-       log.info(" before each");
+    void beforeEach() {
+        log.info(" before each");
         vm = TagVMTestData.defaultVM();
+        vm2 = TagVMTestData.defaultVM();
+        vm3.setId(UUID.randomUUID());
+        vm3.setVersion(2);
+        vm3.setName("rien");
+        vm3.setDescription("wedweddasdsddsds");
+        vm3.setDeleted(false);
+        vm3.setEnabled(true);
     }
 
 
@@ -182,6 +195,26 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addAll_shouldReturnResult(){
+        vms.add(vm);
+        vms.add(vm3);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
+    }
 
+    @Test
+    void addAll_withDuplicatedName_shouldThrowException() {
+        dto =service.save(vm);
+        vms.add(vm);
+        vms.add(vm2);
+        assertThrows(
+                ItemExistsException.class,
+                () ->service.addALL(vms)
+        );
+    }
 
 }

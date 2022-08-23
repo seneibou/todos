@@ -169,9 +169,29 @@ class TodoServiceTest extends ServiceBaseTest {
     }
 
 
+
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void complete_shouldSucceed() {
+        dto =service.save(vm);
+        dto =  service.complete(dto.getId());
+        assertThat(dto)
+            .isNotNull()
+            .hasFieldOrPropertyWithValue("title",vm.getTitle())
+            .hasFieldOrPropertyWithValue("description",vm.getDescription());
+}
+
+    @Test
+    void complete_shouldThrowException() {
+        UUID id =UUID.randomUUID();
+        assertThrows(
+                ItemNotFoundException.class,
+                () ->service.complete(id)
+        );
+    }
+
 
 
 }
