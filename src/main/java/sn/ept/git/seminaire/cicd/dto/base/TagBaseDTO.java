@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class TagBaseDTO extends BaseDTO {
 
-
     @NotBlank
     @Size(min = SizeMapping.Name.MIN,max = SizeMapping.Name.MAX)
     private  String name;

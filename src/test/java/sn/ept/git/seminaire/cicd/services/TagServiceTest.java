@@ -16,6 +16,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ class TagServiceTest extends ServiceBaseTest {
     @Autowired
     ITagService service;
 
-      TagVM vm ;
+    TagVM vm;
     TagDTO dto;
 
 
@@ -169,7 +170,7 @@ class TagServiceTest extends ServiceBaseTest {
 
     @Test
     void findAllPageable_shouldReturnResult() {
-        dto =service.save(vm);
+        dto = service.save(vm);
         final Page<TagDTO> all = service.findAll(PageRequest.of(0,10));
         assertThat(all)
                 .isNotNull()
@@ -178,10 +179,30 @@ class TagServiceTest extends ServiceBaseTest {
                 .contains(dto);
     }
 
-
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void addALL_withExistingTag_shouldThrowException(){
+        dto = service.save(vm);
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        assertThrows(
+            ItemExistsException.class,
+            () -> service.addALL(vms)
+        );
+    }
 
+    @Test
+    void addALL_shouldAddAllTags(){
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1);
+    }
 
 }

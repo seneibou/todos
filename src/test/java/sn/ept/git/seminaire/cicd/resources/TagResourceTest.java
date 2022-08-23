@@ -18,6 +18,8 @@ import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -31,7 +33,7 @@ class TagResourceTest extends BasicResourceTest {
     @Autowired
     private ITagService service;
     private TagDTO dto;
-     private TagVM vm;
+    private TagVM vm;
 
 
     @BeforeAll
@@ -45,7 +47,6 @@ class TagResourceTest extends BasicResourceTest {
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
         dto = TagDTOTestData.defaultDTO();
-
     }
 
     @Test
@@ -66,10 +67,7 @@ class TagResourceTest extends BasicResourceTest {
                 .andExpect(jsonPath("$.content.[0].description").value(dto.getDescription()))
         ;
 
-
-
     }
-
 
     @Test
     void findById_shouldReturnTag() throws Exception {
@@ -116,7 +114,6 @@ class TagResourceTest extends BasicResourceTest {
     @Test
     void add_withTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception {
         vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
-
         mockMvc.perform(post(UrlMapping.Tag.ADD)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.convertObjectToJsonBytes(vm)))
@@ -131,8 +128,6 @@ class TagResourceTest extends BasicResourceTest {
                         .content(TestUtil.convertObjectToJsonBytes(vm)))
                 .andExpect(status().isBadRequest());
     }
-
-
 
     @Test
     void update_shouldUpdateTag() throws Exception {
@@ -193,8 +188,50 @@ class TagResourceTest extends BasicResourceTest {
         ).andExpect(status().isNotFound());
     }
 
-
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addALL_shoudlCreateAllTags() throws Exception{
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        mockMvc.perform(
+            post(UrlMapping.Tag.ADD_ALL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(vms))
+        )
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$[0].id").exists())
+        .andExpect(jsonPath("$[0].version").exists())
+        .andExpect(jsonPath("$[0].enabled").exists())
+        .andExpect(jsonPath("$[0].deleted").exists())
+        .andExpect(jsonPath("$[0].name", is(vms.get(0).getName())))
+        .andExpect(jsonPath("$[0].description").value(vms.get(0).getDescription()));
+    }
+
+    @Test
+    void addALL_withTitleMaxLengthExceeded_shouldReturnBadRequest() throws Exception{
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vm.setName(RandomStringUtils.random(SizeMapping.Name.MAX + 1));
+        vms.add(vm);
+        mockMvc.perform(
+            post(UrlMapping.Tag.ADD_ALL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(vms))
+        )
+        .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void addALL_withTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception{
+        List<TagVM> vms = new ArrayList<TagVM>();
+        vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+        vms.add(vm);
+        mockMvc.perform(
+            post(UrlMapping.Tag.ADD_ALL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(vms))
+        )
+        .andExpect(status().isInternalServerError());
+    }
 }

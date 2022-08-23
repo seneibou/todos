@@ -63,14 +63,13 @@ public class TodoResource {
             @RequestBody @Valid TodoVM vm) {
         final TodoDTO dto = service.update(id, vm);
         Optional<TodoDTO> optional = Optional.ofNullable(dto);
-        return ResponseUtil.wrapOrNotFound(optional,HttpStatus.ACCEPTED);
+        return ResponseUtil.wrapOrNotFound(optional, HttpStatus.ACCEPTED);
     }
-
 
     @DeleteMapping(UrlMapping.Todo.COMPLETE)
     public ResponseEntity<TodoDTO> complete(@PathVariable("id") UUID id) {
         final TodoDTO dto = service.complete(id);
         Optional<TodoDTO> optional = Optional.ofNullable(dto);
-        return ResponseUtil.wrapOrNotFound(optional,HttpStatus.ACCEPTED);
+        return ResponseUtil.wrapOrNotFound(optional, HttpStatus.ACCEPTED);
     }
 }

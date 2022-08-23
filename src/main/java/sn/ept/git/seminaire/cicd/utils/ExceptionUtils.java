@@ -21,14 +21,13 @@ public final class ExceptionUtils {
         }
     }
 
-    public static  void absentOrThrow(Optional<?> optional, String template, String ... params){
+    public static void absentOrThrow(Optional<?> optional, String template, String ... params){
         if(optional.isPresent()){
             throw new ItemExistsException(
                     ItemExistsException.format(template, params)
             );
         }
     }
-
 
     public static  void throwNotFound(String template, String ... params){
             throw new ItemNotFoundException(

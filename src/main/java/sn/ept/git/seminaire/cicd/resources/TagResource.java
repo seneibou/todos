@@ -47,7 +47,6 @@ public class TagResource {
 
     @PostMapping(UrlMapping.Tag.ADD)
     public ResponseEntity<TagDTO> create(@RequestBody @Valid TagVM vm) {
-
         TagDTO created = service.save(vm);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -73,8 +72,8 @@ public class TagResource {
 
 
     @PostMapping(UrlMapping.Tag.ADD_ALL)
-    public ResponseEntity<List<TagDTO>> addALL(@RequestBody List<  @Valid TagVM> vms) {
-        List<TagDTO >  created =  service.addALL(vms);
+    public ResponseEntity<List<TagDTO>> addALL(@RequestBody List<@Valid TagVM> vms) {
+        List<TagDTO> created = service.addALL(vms);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{ids}")
