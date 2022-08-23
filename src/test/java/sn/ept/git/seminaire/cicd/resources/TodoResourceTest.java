@@ -186,10 +186,21 @@ class TodoResourceTest extends BasicResourceTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound());
     }
-
-
-
     //java 8 requis,
-
     //vos tests ici
+    @Test    
+    void complete_shouldCompleteTodo() throws Exception {        
+        dto = service.save(vm);        
+        mockMvc.perform(                        
+                delete(UrlMapping.Todo.COMPLETE, dto.getId())                                
+                .contentType(MediaType.APPLICATION_JSON))                
+                .andExpect(status().isAccepted())                
+                .andExpect(jsonPath("$.id").exists())                
+                .andExpect(jsonPath("$.version").exists())                
+                .andExpect(jsonPath("$.enabled").exists())                
+                .andExpect(jsonPath("$.deleted").exists()) 
+                .andExpect(jsonPath("$.title").value(vm.getTitle()))                
+                .andExpect(jsonPath("$.description").value(vm.getDescription()));
+    }
+
 }

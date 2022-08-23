@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+//import antlr.collections.List;
 import sn.ept.git.seminaire.cicd.data.TagDTOTestData;
 import sn.ept.git.seminaire.cicd.data.TagVMTestData;
 import sn.ept.git.seminaire.cicd.data.TestData;
@@ -17,7 +19,9 @@ import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.ArrayList;
 import java.util.UUID;
+
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -192,9 +196,26 @@ class TagResourceTest extends BasicResourceTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound());
     }
-
-
     //java 8 requis,
-
     //vos tests ici
+    @Test
+    void addALL_shouldCreateTags() throws Exception {       
+        ArrayList<TagVM> vms = new ArrayList<TagVM>();
+        vms.add(vm);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.[0].id").exists())
+                .andExpect(jsonPath("$.[0].version").exists())
+                .andExpect(jsonPath("$.[0].enabled").exists())
+                .andExpect(jsonPath("$.[0].deleted").exists())
+                .andExpect(jsonPath("$.[0].enabled", is(true)))
+                .andExpect(jsonPath("$.[0].deleted").value(false))
+                .andExpect(jsonPath("$.[0].name").value(vm.getName()))
+                .andExpect(jsonPath("$.[0].description").value(vm.getDescription()))
+        ;
+    }  
 }

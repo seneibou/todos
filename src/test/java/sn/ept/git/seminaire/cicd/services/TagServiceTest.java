@@ -18,6 +18,7 @@ import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -177,11 +178,19 @@ class TagServiceTest extends ServiceBaseTest {
                 .hasSize(1)
                 .contains(dto);
     }
-
+    
 
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addALL_shouldCreateTags(){
+        ArrayList<TagVM> vms = new ArrayList<TagVM>();
+        dto =service.save(vm);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
+                .size();
 
-
+    }
 }
