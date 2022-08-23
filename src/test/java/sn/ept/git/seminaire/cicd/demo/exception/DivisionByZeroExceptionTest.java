@@ -15,44 +15,44 @@ public class DivisionByZeroExceptionTest {
     void beforeEach() {
         message = "Test failed";
         cause = new Throwable("empty");
-        enableSuppression = false;
-        writableStackTrace = false;
     }
 
     @Test
     void DivisionByZeroException_WithouthArgs_ShouldCreateException() {
         exception = new DivisionByZeroException();
-        assertEquals(exception.getClass(), DivisionByZeroException.class);
+        assertEquals(DivisionByZeroException.class, exception.getClass());
     }
 
     @Test
     void DivisionByZeroException_WithMessage_ShouldCreateException() {
         exception = new DivisionByZeroException(message);
-        assertEquals(exception.getClass(), DivisionByZeroException.class);
-        assertEquals(exception.getMessage(), message);
+        assertEquals(DivisionByZeroException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
     }
 
     @Test
     void DivisionByZeroException_WithMessageAndThrowable_ShouldCreateException() {
         exception = new DivisionByZeroException(message, cause);
-        assertEquals(exception.getClass(), DivisionByZeroException.class);
-        assertEquals(exception.getMessage(), message);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(DivisionByZeroException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
+        assertEquals(cause, exception.getCause());
     }
 
     @Test
     void DivisionByZeroException_WithThrowable_ShouldCreateException() {
         exception = new DivisionByZeroException(cause);
-        assertEquals(exception.getClass(), DivisionByZeroException.class);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(DivisionByZeroException.class, exception.getClass());
+        assertEquals(cause, exception.getCause());
     }
 
     @Test
     void DivisionByZeroException_WithAllArgs_ShouldCreateException() {
+        enableSuppression = false;
+        writableStackTrace = false;
         exception = new DivisionByZeroException(message, cause, enableSuppression,
                 writableStackTrace);
-        assertEquals(exception.getClass(), DivisionByZeroException.class);
-        assertEquals(exception.getMessage(), message);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(DivisionByZeroException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
+        assertEquals(cause, exception.getCause());
     }
 }

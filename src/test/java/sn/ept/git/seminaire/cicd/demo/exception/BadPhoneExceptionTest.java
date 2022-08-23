@@ -15,44 +15,44 @@ public class BadPhoneExceptionTest {
     void beforeEach() {
         message = "Test failed";
         cause = new Throwable("empty");
-        enableSuppression = false;
-        writableStackTrace = false;
     }
 
     @Test
     void BadPhoneException_WithouthArgs_ShouldCreateException() {
         exception = new BadPhoneException();
-        assertEquals(exception.getClass(), BadPhoneException.class);
+        assertEquals(BadPhoneException.class, exception.getClass());
     }
 
     @Test
     void BadPhoneException_WithMessage_ShouldCreateException() {
         exception = new BadPhoneException(message);
-        assertEquals(exception.getClass(), BadPhoneException.class);
-        assertEquals(exception.getMessage(), message);
+        assertEquals(BadPhoneException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
     }
 
     @Test
     void BadPhoneException_WithMessageAndThrowable_ShouldCreateException() {
         exception = new BadPhoneException(message, cause);
-        assertEquals(exception.getClass(), BadPhoneException.class);
-        assertEquals(exception.getMessage(), message);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(BadPhoneException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
+        assertEquals(cause, exception.getCause());
     }
 
     @Test
     void BadPhoneException_WithThrowable_ShouldCreateException() {
         exception = new BadPhoneException(cause);
-        assertEquals(exception.getClass(), BadPhoneException.class);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(BadPhoneException.class, exception.getClass());
+        assertEquals(cause, exception.getCause());
     }
 
     @Test
     void BadPhoneException_WithAllArgs_ShouldCreateException() {
+        enableSuppression = false;
+        writableStackTrace = false;
         exception = new BadPhoneException(message, cause, enableSuppression,
                 writableStackTrace);
-        assertEquals(exception.getClass(), BadPhoneException.class);
-        assertEquals(exception.getMessage(), message);
-        assertEquals(exception.getCause(), cause);
+        assertEquals(BadPhoneException.class, exception.getClass());
+        assertEquals(message, exception.getMessage());
+        assertEquals(cause, exception.getCause());
     }
 }
