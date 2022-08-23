@@ -34,6 +34,12 @@ class TagServiceTest extends ServiceBaseTest {
       TagVM vm ;
     TagDTO dto;
 
+    TagVM vmZ ;
+
+    TagVM vmKaba = new TagVM() ;
+
+    List<TagVM> vms = new ArrayList<>();
+
 
     @BeforeAll
     static void beforeAll(){
@@ -44,6 +50,8 @@ class TagServiceTest extends ServiceBaseTest {
      void beforeEach(){
        log.info(" before each");
         vm = TagVMTestData.defaultVM();
+        vmZ= TagVMTestData.defaultVM();
+        vmKaba.setID(UUID.randomUUID);
     }
 
 
@@ -180,6 +188,26 @@ class TagServiceTest extends ServiceBaseTest {
 
 
     //vos tests ici
+@Test
+    void AddShouldReturnResult(){
+        vms.add(vm);
+        vms.add(vmKaba);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
+}
 
+@Test
+    void addwithDup_Name_giveException(){
+        dto=service.save(vm);
+        vms.add;
+        vms.add(vmZ);
+        asserThrows(
+                ItemExistsException.class,
+                () ->service.addALL(vms)
+        );
+}
 
 }

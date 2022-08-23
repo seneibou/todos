@@ -33,6 +33,11 @@ class TagResourceTest extends BasicResourceTest {
     private TagDTO dto;
      private TagVM vm;
 
+     TagVM vmKaba = new TagVM() ;
+
+     List<TagVM> vms= new ArrayList<>();
+
+
 
     @BeforeAll
     static void beforeAll() {
@@ -45,6 +50,8 @@ class TagResourceTest extends BasicResourceTest {
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
         dto = TagDTOTestData.defaultDTO();
+        vmKaba.setId(UUID.randomUUID());
+
 
     }
 
@@ -197,4 +204,19 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis, maven requis (si wrapper non utilisé)
 
     //vos tests ici
+    @Test
+    void addShouldAddTags() throws Exception {
+        vms.add(vm);
+        vms.add(vmKaba);
+        mockMvc.perform(
+    post(UrlMapping.Tag.ADD_ALL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(vms))
+        )
+                .andExpect(status().isCreated())
+                ;
+
+    }
+
+
 }

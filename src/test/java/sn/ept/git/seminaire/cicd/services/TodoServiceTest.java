@@ -171,3 +171,23 @@ class TodoServiceTest extends ServiceBaseTest {
 
 
 }
+
+@Test
+void complete_Succeed(){
+    dto=service.save(vm);
+    dto=service.complete(dto.getId());
+    assertThat(dto)
+            .isNotNull();
+}
+
+@Test
+void complete_avecMauvaisId_Exception(){
+    dto=service.save(vm);
+    UUID id= UUID.randomUUID();
+    assertThrows(
+            ItemNotFoundException.class,
+            ()->service.complete(id)
+    );
+
+}
+
