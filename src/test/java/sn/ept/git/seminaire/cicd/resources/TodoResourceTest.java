@@ -191,8 +191,7 @@ class TodoResourceTest extends BasicResourceTest {
                                 .andExpect(jsonPath("$.deleted").exists())
                                 .andExpect(jsonPath("$.title").value(vm.getTitle()))
                                 .andExpect(jsonPath("$.description").value(vm.getDescription()))
-                                .andExpect(jsonPath("$.completed").value(true))
-                                .andExpect(jsonPath("$.size()").value(1));
+                                .andExpect(jsonPath("$.completed").value(true));
         }
 
         @Test
