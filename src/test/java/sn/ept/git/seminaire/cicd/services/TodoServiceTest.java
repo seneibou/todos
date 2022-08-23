@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import sn.ept.git.seminaire.cicd.models.Todo_;
 
 /*@SqlGroup({
         @Sql("classpath:0_todo_data_test.sql"),
@@ -172,6 +173,26 @@ class TodoServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void complete_shouldCompleteTodo(){        
+    
+        dto =service.save(vm);
+        
+        dto = service.complete(dto.getId());
+        
+        assertThat(dto.isCompleted()).isTrue();
+    }
+    
+    @Test
+    void complete_withBadId_shouldThrowException(){
+        
+        UUID id = UUID.randomUUID();
+        assertThrows(
+                ItemNotFoundException.class,
+                () ->service.complete(id)
+        );
+    }
 
 
 }

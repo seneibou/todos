@@ -1,5 +1,7 @@
 package sn.ept.git.seminaire.cicd.resources;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -197,4 +199,59 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    
+    @Test
+    void addAll_shouldCreateAllTags() throws Exception {
+        List<TagVM> vms = new ArrayList<TagVM>();
+        
+        vms.add(vm);
+        
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.size()", is(1)))
+                .andExpect(jsonPath("$.[0].id").exists())
+                .andExpect(jsonPath("$.[0].version").exists())
+                .andExpect(jsonPath("$.[0].enabled").exists())
+                .andExpect(jsonPath("$.[0].deleted").exists())
+                .andExpect(jsonPath("$.[0].enabled", is(true)))
+                .andExpect(jsonPath("$.[0].deleted").value(false))
+                .andExpect(jsonPath("$.[0].name", is(dto.getName())))
+                .andExpect(jsonPath("$.[0].description").value(dto.getDescription()));
+    }
+    
+    
+     @Test
+    void addAll_withATagTitleMinLengthExceeded_shouldReturnBadRequest() throws Exception {
+        vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+        
+        List<TagVM> vms = new ArrayList<TagVM>();
+        
+        vms.add(vm);
+
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms)))
+                .andExpect(status().isInternalServerError());
+    }
+
+     @Test
+    void addAll_withATagTitleMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+        vm.setName(RandomStringUtils.random(SizeMapping.Name.MAX + 1));
+        
+        List<TagVM> vms = new ArrayList<TagVM>();
+        
+        vms.add(vm);
+
+        mockMvc.perform(post(UrlMapping.Tag.ADD_ALL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtil.convertObjectToJsonBytes(vms)))
+                .andExpect(status().isInternalServerError());
+    }
+
+
+    
 }

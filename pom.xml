@@ -32,7 +32,7 @@
         <sonar.login>admin</sonar.login>
         <sonar.password>admin</sonar.password>
 
-      <sonar.exclusions>
+        <sonar.exclusions>
             **/*.xml,\
             src/main/java/sn/ept/git/seminaire/cicd/TodoApplication.java,\
             src/main/java/sn/ept/git/seminaire/cicd/demo/**.java,\
