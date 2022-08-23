@@ -74,9 +74,7 @@ public class TagResource {
 
 
     @PostMapping(UrlMapping.Tag.ADD_ALL)
-    public ResponseEntity<List<TagDTO>> addALL(@RequestBody List<  @Valid TagVM> vms) {
-        System.out.println("enter add all method");
-        
+    public ResponseEntity<List<TagDTO>> addALL(@RequestBody List<  @Valid TagVM> vms) {  
         List<TagDTO >  created =  service.addALL(vms);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

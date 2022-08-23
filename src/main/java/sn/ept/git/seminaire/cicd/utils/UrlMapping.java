@@ -22,6 +22,7 @@ public final class UrlMapping {
         public static final String BASE = UrlMapping.BASE + "todos";
         public static final String ALL = Todo.BASE;
         public static final String FIND_BY_ID = Todo.BASE + ID;
+        public static final String COMPLETE = Todo.BASE;
         public static final String ADD = Todo.BASE;
         public static final String UPDATE = Todo.FIND_BY_ID;
         public static final String DELETE = Todo.FIND_BY_ID;

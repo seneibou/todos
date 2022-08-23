@@ -116,9 +116,7 @@ public class TagServiceImpl implements ITagService {
 
     @Transactional
     @Override
-    public List<TagDTO> addALL(
-            List<TagVM> vms
-    ) {
+    public List<TagDTO> addALL( List<TagVM> vms) {
         //on décide volontairement d'appliquer la loi du tout ou rien
         Optional<String> msg = vms
                 .stream()

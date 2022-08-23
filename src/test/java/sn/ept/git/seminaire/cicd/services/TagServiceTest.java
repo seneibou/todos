@@ -30,8 +30,10 @@ class TagServiceTest extends ServiceBaseTest {
     TagRepository repository;
     @Autowired
     ITagService service;
+    List<TagVM> vms;
 
-      TagVM vm ;
+    TagVM vm ;
+    TagVM vm1;
     TagDTO dto;
 
 
@@ -180,6 +182,27 @@ class TagServiceTest extends ServiceBaseTest {
 
 
     //vos tests ici
+    @Test
+    void addAll_shouldReturnResult(){
+        vms.add(vm);
+        vms.add(vm1);
+        final List<TagDTO> all = service.addALL(vms);
+        assertThat(all)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
+    }
+
+    @Test
+    void addAll_withDuplicatedName_shouldThrowException() {
+        dto =service.save(vm);
+        vms.add(vm);
+        vms.add(vm1);
+        assertThrows(
+                ItemExistsException.class,
+                () ->service.addALL(vms)
+        );
+    }
 
 
 }

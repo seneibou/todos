@@ -17,6 +17,7 @@ import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -30,8 +31,10 @@ class TagResourceTest extends BasicResourceTest {
 
     @Autowired
     private ITagService service;
+    List<TagVM> vms;
     private TagDTO dto;
      private TagVM vm;
+     private TagVM vm_1;
 
 
     @BeforeAll
@@ -197,4 +200,19 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis, maven requis (si wrapper non utilisé)
 
     //vos tests ici
+
+    @Test
+    void addAll_shouldAddAllTags() throws Exception {
+        vms.add(vm);
+        vms.add(vm_1);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(vms))
+                )
+                .andExpect(status().isCreated())
+
+        ;
+
+    }
 }

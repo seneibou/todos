@@ -69,6 +69,7 @@ class TodoServiceTest extends ServiceBaseTest {
         assertThrows(
                 ItemExistsException.class,
                 () -> service.save(vm)
+
         );
     }
 
@@ -168,6 +169,19 @@ class TodoServiceTest extends ServiceBaseTest {
         );
     }
 
+    @Test
+    void complete_shouldSucceed() {
+        dto =service.save(vm);
+        assertThat(dto)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("title",vm.getTitle())
+                .hasFieldOrPropertyWithValue("description",vm.getDescription());
+    }
 
+    @Test
+    void complete_withBadId_shouldThrowException() {
+        dto =service.save(vm);
+        UUID id =UUID.randomUUID();
+    }
 
 }

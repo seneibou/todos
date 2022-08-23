@@ -187,4 +187,34 @@ class TodoResourceTest extends BasicResourceTest {
         ).andExpect(status().isNotFound());
     }
 
+
+    @Test
+    void complete_shouldCompleteTodo() throws Exception {
+        dto = service.save(vm);
+        mockMvc.perform(
+                        delete(UrlMapping.Todo.COMPLETE, dto.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+
+                )
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.version").exists())
+                .andExpect(jsonPath("$.enabled").exists())
+                .andExpect(jsonPath("$.deleted").exists())
+                .andExpect(jsonPath("$.title").value(vm.getTitle()))
+                .andExpect(jsonPath("$.description").value(vm.getDescription()))
+        ;
+
+        ;
+    }
+
+    @Test
+    void complete_withBadId_shouldReturnNotFound() throws Exception {
+        dto = service.save(vm);
+        mockMvc.perform(
+                delete(UrlMapping.Todo.COMPLETE, UUID.randomUUID().toString())
+                        .contentType(MediaType.APPLICATION_JSON
+                        )
+        ).andExpect(status().isNotFound());
+    }
 }
