@@ -177,8 +177,6 @@ class TagServiceTest extends ServiceBaseTest {
                 .hasSize(1)
                 .contains(dto);
     }
-    }
-
 
     //java 8 requis,
 
