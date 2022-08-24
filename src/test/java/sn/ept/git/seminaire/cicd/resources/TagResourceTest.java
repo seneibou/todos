@@ -17,6 +17,7 @@ import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -32,7 +33,7 @@ class TagResourceTest extends BasicResourceTest {
     private ITagService service;
     private TagDTO dto;
      private TagVM vm;
-
+     ArrayList<TagVM> vms ;
 
     @BeforeAll
     static void beforeAll() {
@@ -45,6 +46,12 @@ class TagResourceTest extends BasicResourceTest {
         service.deleteAll();
         vm = TagVMTestData.defaultVM();
         dto = TagDTOTestData.defaultDTO();
+        vms = new ArrayList<TagVM>();
+        vms.add(TagVMTestData.defaultVM());
+        vms.add(TagVMTestData.defaultVM());
+        vms.add(TagVMTestData.defaultVM());
+        vms.add(TagVMTestData.defaultVM());
+
 
     }
 
@@ -197,4 +204,32 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+    @Test
+    void addALL_shouldCreateTag() throws Exception {
+        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> descriptions = new ArrayList<String>();
+        for (TagVM vm:vms){
+            names.add(vm.getName());
+            descriptions.add(vm.getDescription());
+        }
+            mockMvc.perform(
+                            post(UrlMapping.Tag.ADD_ALL)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(TestUtil.convertObjectToJsonBytes(vms))
+                    )
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$[*].id", hasSize(vms.size())))
+                    .andExpect(jsonPath("$[*].version", hasSize(vms.size())))
+                    .andExpect(jsonPath("$[*].enabled", hasSize(vms.size())))
+                    .andExpect(jsonPath("$[*].deleted", hasSize(vms.size())))
+                    .andExpect(jsonPath("$[*].name",is(names)))
+                    .andExpect(jsonPath("$[*].description",is(descriptions)))
+            ;
+
+
+    }
+
+    
+
+
 }

@@ -1,5 +1,6 @@
 package sn.ept.git.seminaire.cicd.services;
 
+import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +30,12 @@ class TagServiceTest extends ServiceBaseTest {
     @Autowired
     TagRepository repository;
     @Autowired
+
     ITagService service;
-
-      TagVM vm ;
+    List<TagDTO> dts;
+    ArrayList<TagVM> vms ;
     TagDTO dto;
-
+    TagVM vm;
 
     @BeforeAll
     static void beforeAll(){
@@ -43,7 +45,14 @@ class TagServiceTest extends ServiceBaseTest {
     @BeforeEach
      void beforeEach(){
        log.info(" before each");
-        vm = TagVMTestData.defaultVM();
+       vm = TagVMTestData.defaultVM();
+       vms = new ArrayList<TagVM>();
+       vms.add(TagVMTestData.defaultVM());
+       vms.add(TagVMTestData.defaultVM());
+       vms.add(TagVMTestData.defaultVM());
+       vms.add(TagVMTestData.defaultVM());
+       vms.add(vm);
+       
     }
 
 
@@ -154,8 +163,6 @@ class TagServiceTest extends ServiceBaseTest {
     }
 
 
-
-
     @Test
     void findAll_shouldReturnResult() {
         dto =service.save(vm);
@@ -177,12 +184,28 @@ class TagServiceTest extends ServiceBaseTest {
                 .hasSize(1)
                 .contains(dto);
     }
-    }
 
 
     //java 8 requis,
 
     //vos tests ici
-
+    @Test
+    void addALL_shouldSaveTag() 
+    {
+        dts = service.addALL(vms);
+        assertThat(dts)
+                .isNotNull()
+                .hasSameSizeAs(vms)
+                ;
+    }
+    
+    @Test
+   void addALL_HasAnAlreadyExistingItem_shouldThrowException() {
+       dto = service.save(vm);
+        assertThrows(
+                ItemExistsException.class,
+                () -> service.addALL(vms)
+        );
+    }
 
 }
