@@ -197,4 +197,25 @@ class TagResourceTest extends BasicResourceTest {
     //java 8 requis,
 
     //vos tests ici
+
+    @Test
+    void addAll_shouldCreateTag() throws Exception {
+    	List<TagDTO >  created =  service.addALL(vms);
+        mockMvc.perform(
+                        post(UrlMapping.Tag.ADD_ALL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtil.convertObjectToJsonBytes(created))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content.[0].id").exists())
+                .andExpect(jsonPath("$.content.[0].version").exists())
+                .andExpect(jsonPath("$.content.[0].enabled").exists())
+                .andExpect(jsonPath("$.content.[0].deleted").exists())
+                .andExpect(jsonPath("$.content.[0].enabled", is(true)))
+                .andExpect(jsonPath("$.content.[0].deleted").value(false))
+                .andExpect(jsonPath("$.content.[0].name", is(dto.getName())))
+                .andExpect(jsonPath("$.content.[0].description").value(dto.getDescription()))
+        ;
+    }
 }

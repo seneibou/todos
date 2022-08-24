@@ -182,6 +182,22 @@ class TagServiceTest extends ServiceBaseTest {
     //java 8 requis,
 
     //vos tests ici
-
+    @test
+    void addAll_shouldReturnResult() {
+        dto = service.save(vm);
+        final List<TagVM> list = service.addAll(vms);
+        assertThat(list)
+                .isNotNull()
+                .isPresent();
+    }
+    
+    @test
+    void addAll_withSameName_shouldThrowException() {
+    	dto = service.save(vm);
+        assertThrows(
+                ItemExistsException.class,
+                () -> service.addAll(vm)
+        );
+    }
 
 }
