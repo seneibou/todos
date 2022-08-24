@@ -40,6 +40,7 @@ class TodoDTOMapperTest {
                 .isNotNull()
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
+                .ignoringFields("tags")
                 .ignoringFieldsMatchingRegexes("^_")//just to discover
                 .withEqualsForFields((idOne,idTwo)-> {
                     //use lambda
